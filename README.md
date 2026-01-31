@@ -605,4 +605,6 @@ Depuis la dossier streamlit :
 streamlit run Home.py
 ```
 
+Ou bien vous pouvez copiez le code complet de l'app qui regroupe toute les pages directement dans snowflake
+
 ---
