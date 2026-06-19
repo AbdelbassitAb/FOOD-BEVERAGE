@@ -535,7 +535,7 @@ SNOWFLAKE/
 │ ├── phase_1/
 │ │ ├── 1_préparation_environnement.sql
 │ │ ├── 2_creation_tables.sql
-│ │ ├── 3_chargement_donnée.sql
+│ │ ├── 3_chargement_donnee.sql
 │ │ ├── 4_verification_chargement.sql
 │ │ └── 5_clean_data.sql
 │ ├── phase_2/
