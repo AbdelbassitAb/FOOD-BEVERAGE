@@ -1,7 +1,7 @@
 -- Phase 1 Data Preparation & Ingestion
 -- Step 1: Snowflake environment setup
 
--- CREATE a warehouse
+-- Create a warehouse
 CREATE OR REPLACE WAREHOUSE WH_LAB
 WITH
   WAREHOUSE_SIZE = 'XSMALL'
@@ -23,7 +23,7 @@ CREATE OR REPLACE SCHEMA ANYCOMPANY_LAB.ANALYTICS;
 USE DATABASE ANYCOMPANY_LAB;
 USE SCHEMA BRONZE;
 
--- CSV format WITH ',' delimiter
+-- CSV format with ',' delimiter
 
 CREATE OR REPLACE FILE FORMAT FF_CSV
   TYPE = CSV
@@ -33,7 +33,7 @@ CREATE OR REPLACE FILE FORMAT FF_CSV
   TRIM_SPACE = TRUE
   NULL_IF = ('', 'NULL');
 
--- CSV format WITH '\t' tab delimiter
+-- CSV format with '\t' tab delimiter
 CREATE OR REPLACE FILE FORMAT FF_TSV
   TYPE = CSV
   FIELD_DELIMITER = '\t'
