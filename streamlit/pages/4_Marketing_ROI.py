@@ -45,12 +45,16 @@ ORDER BY sales_during_campaign DESC NULLS LAST
 LIMIT 50;
 """)
 
-df_campaign_sales["SALES_DURING_CAMPAIGN"] = df_campaign_sales["SALES_DURING_CAMPAIGN"].astype(float)
+df_campaign_sales["SALES_DURING_CAMPAIGN"] = df_campaign_sales[
+    "SALES_DURING_CAMPAIGN"
+].astype(float)
 
 
 st.caption("Top campaign sales during promotion — bar chart")
 if not df_campaign_sales.empty:
-    st.bar_chart(df_campaign_sales.head(20).set_index("CAMPAIGN_NAME")[["SALES_DURING_CAMPAIGN"]])
+    st.bar_chart(
+        df_campaign_sales.head(20).set_index("CAMPAIGN_NAME")[["SALES_DURING_CAMPAIGN"]]
+    )
 
 with st.expander("View tables"):
     st.dataframe(df_roi, use_container_width=True)

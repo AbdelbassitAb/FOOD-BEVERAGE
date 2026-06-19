@@ -1,11 +1,7 @@
-
 ################################################################################
-##      c'est le code de l'app qui regroupe les autres fichiers 
+##      c'est le code de l'app qui regroupe les autres fichiers
 ##      Vous pouvez copier ce code directement dans snowflake et l'executer
 ################################################################################
-
-
-
 
 
 import streamlit as st
@@ -18,9 +14,11 @@ from snowflake.snowpark.context import get_active_session
 st.set_page_config(page_title="AnyCompany • Marketing Analytics", layout="wide")
 session = get_active_session()
 
+
 @st.cache_data(ttl=300)
 def run_query(sql: str) -> pd.DataFrame:
     return session.sql(sql).to_pandas()
+
 
 def safe_float(x, default=0.0):
     try:
@@ -28,17 +26,20 @@ def safe_float(x, default=0.0):
     except:
         return default
 
+
 def safe_int(x, default=0):
     try:
         return default if x is None else int(x)
     except:
         return default
 
+
 def fmt_money(x: float) -> str:
     try:
         return f"{x:,.0f}".replace(",", " ")
     except:
         return str(x)
+
 
 # ============================================================
 # ============================================================
@@ -55,7 +56,7 @@ with st.sidebar:
             "👥 Customers",
             "🚚 Ops & Logistics",
         ],
-        index=0
+        index=0,
     )
     st.divider()
     st.caption("Sources: ANYCOMPANY_LAB.SILVER")
@@ -64,6 +65,7 @@ with st.sidebar:
 # APP HEADER
 # ============================================================
 st.title("AnyCompany • Data-Driven Marketing Analytics")
+
 
 # ============================================================
 # PAGES
@@ -104,7 +106,11 @@ def overview_page():
     SELECT AVG(is_promo)::FLOAT AS promo_rate
     FROM flagged;
     """)
-    promo_rate = safe_float(promo_rate_df.loc[0, "PROMO_RATE"]) if not promo_rate_df.empty else 0.0
+    promo_rate = (
+        safe_float(promo_rate_df.loc[0, "PROMO_RATE"])
+        if not promo_rate_df.empty
+        else 0.0
+    )
 
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Total Sales", fmt_money(total_sales))
@@ -299,7 +305,11 @@ def roi_page():
 
     st.caption("Top campaigns by sales during campaign — bar chart")
     if not df_campaign_sales.empty:
-        st.bar_chart(df_campaign_sales.head(20).set_index("CAMPAIGN_NAME")[["SALES_DURING_CAMPAIGN"]])
+        st.bar_chart(
+            df_campaign_sales.head(20).set_index("CAMPAIGN_NAME")[
+                ["SALES_DURING_CAMPAIGN"]
+            ]
+        )
     else:
         st.info("No campaign sales data.")
 
@@ -410,7 +420,9 @@ def ops_page():
     with left:
         st.caption("Stock alerts by category — bar chart")
         if not df_stock_cat.empty:
-            st.bar_chart(df_stock_cat.set_index("PRODUCT_CATEGORY")[["NB_STOCK_ALERTS"]])
+            st.bar_chart(
+                df_stock_cat.set_index("PRODUCT_CATEGORY")[["NB_STOCK_ALERTS"]]
+            )
         else:
             st.info("No stock alerts detected.")
 
@@ -441,4 +453,3 @@ elif page == "👥 Customers":
     customers_page()
 else:
     ops_page()
-
