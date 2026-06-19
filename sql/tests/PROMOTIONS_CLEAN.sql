@@ -1,5 +1,5 @@
 -- Validation: SILVER.PROMOTIONS_CLEAN
--- This query returns rows WITH invalid promotion discounts.
+-- This query returns rows with invalid promotion discounts.
 SELECT *
 FROM SILVER.PROMOTIONS_CLEAN
 WHERE discount_percentage IS NULL

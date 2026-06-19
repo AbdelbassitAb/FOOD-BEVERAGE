@@ -2,9 +2,8 @@
 
 -- -----------------------------------------------------------------------
 
--- TABLE 1 — BRONZE.FINANCIAL_TRANSACTIONS → SILVER.FINANCIAL_TRANSACTIONS_CLEAN
 
--- Nulls ON key columns
+-- Nulls on key columns
 SELECT
   SUM(IFF(transaction_id IS NULL OR TRIM(transaction_id) = '', 1, 0)) AS null_transaction_id,
   SUM(IFF(transaction_date IS NULL, 1, 0)) AS null_transaction_date,
@@ -12,7 +11,7 @@ SELECT
   SUM(IFF(region IS NULL OR TRIM(region) = '', 1, 0)) AS null_region
 FROM BRONZE.FINANCIAL_TRANSACTIONS;
 
--- CREATE SILVER TABLE (cleaning)
+-- Create SILVER table (cleaning)
 
 CREATE OR REPLACE TABLE SILVER.FINANCIAL_TRANSACTIONS_CLEAN AS
 SELECT
@@ -54,7 +53,7 @@ FROM SILVER.FINANCIAL_TRANSACTIONS_CLEAN;
 -- ------------------------------------------------------------
 -- TABLE 2 — BRONZE.PROMOTIONS_DATA → SILVER.PROMOTIONS_CLEAN
 
--- Nulls ON key columns
+-- Nulls on key columns
 SELECT
   SUM(IFF(promotion_id IS NULL OR TRIM(promotion_id) = '', 1, 0)) AS null_promotion_id,
   SUM(IFF(product_category IS NULL OR TRIM(product_category) = '', 1, 0)) AS null_product_category,
@@ -64,7 +63,7 @@ SELECT
   SUM(IFF(discount_percentage IS NULL, 1, 0)) AS null_discount
 FROM BRONZE.PROMOTIONS_DATA;
 
--- CREATE SILVER TABLE (cleaning)
+-- Create SILVER table (cleaning)
 CREATE OR REPLACE TABLE SILVER.PROMOTIONS_CLEAN AS
 SELECT
   TRIM(promotion_id) AS promotion_id,
@@ -94,7 +93,7 @@ SELECT
 -- -----------------------------------------------------
 -- TABLE 3 — BRONZE.MARKETING_CAMPAIGNS → SILVER.MARKETING_CAMPAIGNS_CLEAN
 
--- Nulls ON key columns
+-- Nulls on key columns
 SELECT
   SUM(IFF(campaign_id IS NULL OR TRIM(campaign_id) = '', 1, 0)) AS null_campaign_id,
   SUM(IFF(start_date IS NULL, 1, 0)) AS null_start_date,
@@ -175,7 +174,7 @@ SELECT
   NULLIF(TRIM(reviewer_name), '') AS reviewer_name,
   TRY_TO_NUMBER(rating::VARCHAR) AS rating,
 
-  /* date : si timestamp, ON le convertit puis ON prend la date */
+  /* date: if already a timestamp, convert and take the date */
   COALESCE(
     TRY_TO_DATE(review_date::VARCHAR),
     TO_DATE(TRY_TO_TIMESTAMP_NTZ(review_date::VARCHAR))

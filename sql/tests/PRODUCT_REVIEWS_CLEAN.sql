@@ -1,5 +1,5 @@
 -- Validation: SILVER.PRODUCT_REVIEWS_CLEAN
--- This query returns rows WITH invalid review ratings.
+-- This query returns rows with invalid review ratings.
 SELECT *
 FROM SILVER.PRODUCT_REVIEWS_CLEAN
 WHERE rating IS NULL
