@@ -3,7 +3,7 @@ import pandas as pd
 from _utils import run_query
 
 st.title("📈 Sales")
-st.caption("Tendances & sanity checks")
+st.caption("Trends & sanity checks")
 
 df_month = run_query("""
 SELECT DATE_TRUNC('month', transaction_date) AS month,
@@ -17,11 +17,11 @@ ORDER BY month;
 
 if not df_month.empty:
     df_month["MONTH"] = pd.to_datetime(df_month["MONTH"])
-st.caption("Total Sales (monthly) — line chart")
-st.line_chart(df_month.set_index("MONTH")[["TOTAL_SALES"]])
+    st.caption("Total Sales (monthly) — line chart")
+    st.line_chart(df_month.set_index("MONTH")[["TOTAL_SALES"]])
 
-st.caption("Number of sales (monthly) — line chart")
-st.line_chart(df_month.set_index("MONTH")[["NB_SALES"]])
+    st.caption("Number of sales (monthly) — line chart")
+    st.line_chart(df_month.set_index("MONTH")[["NB_SALES"]])
 else:
     st.info("No sales data.")
 

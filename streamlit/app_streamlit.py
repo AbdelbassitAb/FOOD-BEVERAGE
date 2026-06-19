@@ -218,11 +218,11 @@ def promotions_page():
     c1, c2 = st.columns(2)
 
     with c1:
-st.caption("Number of promotions by category — bar chart")
-    if not df_cat.empty:
-        st.bar_chart(df_cat.set_index("PRODUCT_CATEGORY")[["NB_PROMOS"]])
-    else:
-        st.info("No promotion data by category.")
+        st.caption("Number of promotions by category — bar chart")
+        if not df_cat.empty:
+            st.bar_chart(df_cat.set_index("PRODUCT_CATEGORY")[["NB_PROMOS"]])
+        else:
+            st.info("No promotion data by category.")
 
     with c2:
         st.caption("Average discount by category — bar chart")
