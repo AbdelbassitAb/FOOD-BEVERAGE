@@ -1,23 +1,43 @@
 """
 Check which database has the ML tables
 """
+import os
 import snowflake.connector
 import toml
-import os
 
-# Load secrets
-secrets_path = os.path.join(os.path.dirname(__file__), '.streamlit', 'secrets.toml')
-with open(secrets_path, 'r') as f:
-    secrets = toml.load(f)
 
-cfg = secrets['snowflake']
+def load_snowflake_config():
+    if os.getenv("SNOWFLAKE_ACCOUNT") and os.getenv("SNOWFLAKE_USER") and os.getenv("SNOWFLAKE_PASSWORD"):
+        return {
+            "account": os.getenv("SNOWFLAKE_ACCOUNT"),
+            "user": os.getenv("SNOWFLAKE_USER"),
+            "password": os.getenv("SNOWFLAKE_PASSWORD"),
+            "warehouse": os.getenv("SNOWFLAKE_WAREHOUSE"),
+            "role": os.getenv("SNOWFLAKE_ROLE", "SYSADMIN"),
+            "database": os.getenv("SNOWFLAKE_DATABASE"),
+            "schema": os.getenv("SNOWFLAKE_SCHEMA"),
+        }
+
+    secrets_path = os.path.join(os.path.dirname(__file__), '.streamlit', 'secrets.toml')
+    if os.path.exists(secrets_path):
+        with open(secrets_path, 'r') as f:
+            secrets = toml.load(f)
+        return secrets['snowflake']
+
+    raise EnvironmentError(
+        "Snowflake credentials not found. Set the environment variables SNOWFLAKE_ACCOUNT, SNOWFLAKE_USER, "
+        "SNOWFLAKE_PASSWORD, etc., or create streamlit/.streamlit/secrets.toml."
+    )
+
+
+cfg = load_snowflake_config()
 
 # Connect
 conn = snowflake.connector.connect(
     account=cfg['account'],
     user=cfg['user'],
     password=cfg['password'],
-    warehouse=cfg['warehouse'],
+    warehouse=cfg.get('warehouse'),
     role=cfg.get('role', 'SYSADMIN')
 )
 

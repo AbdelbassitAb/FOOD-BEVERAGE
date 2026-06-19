@@ -3,14 +3,15 @@
 Projet réalisé dans le cadre du workshop **Data-Driven Marketing Analytics avec Snowflake et Streamlit**.  
 Objectif : construire un socle analytique fiable (ingestion + nettoyage), produire des analyses business, puis industrialiser ces analyses sous forme de **data product** prêt pour la BI et le Machine Learning.
 
-## 🔐 Accès Snowflake
+## 🔐 Snowflake access
 
+This project does not include live Snowflake credentials. Configure your own connection in `streamlit/.streamlit/secrets.toml` or use environment variables.
 
-- **URL** : https://pcvplxy-rrb95749.snowflakecomputing.com  
-- **Login** : mbaesg  
-- **Password** : Test@123456@123  
-- **Database** : ANYCOMPANY_LAB  
-- **Warehouse** : WH_LAB  
+- **URL** : set via `streamlit/.streamlit/secrets.toml` or environment variables
+- **Login** : set via `streamlit/.streamlit/secrets.toml` or environment variables
+- **Password** : set via `streamlit/.streamlit/secrets.toml` or environment variables
+- **Database** : set via `streamlit/.streamlit/secrets.toml` or environment variables
+- **Warehouse** : set via `streamlit/.streamlit/secrets.toml` or environment variables
 
 
 

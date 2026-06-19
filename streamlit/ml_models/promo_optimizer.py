@@ -16,33 +16,47 @@ import os
 import snowflake.connector
 import toml
 
-def get_snowflake_connection():
-    """Get Snowflake connection without Streamlit context"""
-    # Try to find secrets.toml
+def load_snowflake_config():
+    if os.getenv("SNOWFLAKE_ACCOUNT") and os.getenv("SNOWFLAKE_USER") and os.getenv("SNOWFLAKE_PASSWORD"):
+        return {
+            "account": os.getenv("SNOWFLAKE_ACCOUNT"),
+            "user": os.getenv("SNOWFLAKE_USER"),
+            "password": os.getenv("SNOWFLAKE_PASSWORD"),
+            "warehouse": os.getenv("SNOWFLAKE_WAREHOUSE"),
+            "database": os.getenv("SNOWFLAKE_DATABASE"),
+            "schema": os.getenv("SNOWFLAKE_SCHEMA"),
+        }
+
     possible_paths = [
         os.path.join(os.path.dirname(__file__), '..', '.streamlit', 'secrets.toml'),
         os.path.join(os.path.expanduser('~'), '.streamlit', 'secrets.toml'),
     ]
     
-    secrets = None
     for path in possible_paths:
         if os.path.exists(path):
             with open(path, 'r') as f:
                 secrets = toml.load(f)
-            break
-    
-    if not secrets or 'snowflake' not in secrets:
-        raise Exception(f"Could not find secrets.toml with [snowflake] section. Tried: {possible_paths}")
-    
-    cfg = secrets['snowflake']
-    
+            if 'snowflake' in secrets:
+                return secrets['snowflake']
+
+    raise Exception(
+        "Could not find Snowflake credentials. Set the environment variables SNOWFLAKE_ACCOUNT, "
+        "SNOWFLAKE_USER, SNOWFLAKE_PASSWORD, SNOWFLAKE_WAREHOUSE, SNOWFLAKE_DATABASE, SNOWFLAKE_SCHEMA, "
+        "or create streamlit/.streamlit/secrets.toml."
+    )
+
+
+def get_snowflake_connection():
+    """Get Snowflake connection without Streamlit context"""
+    cfg = load_snowflake_config()
+
     return snowflake.connector.connect(
         account=cfg['account'],
         user=cfg['user'],
         password=cfg['password'],
-        warehouse=cfg['warehouse'],
-        database=cfg['database'],
-        schema=cfg['schema']
+        warehouse=cfg.get('warehouse'),
+        database=cfg.get('database'),
+        schema=cfg.get('schema')
     )
 
 def run_query_standalone(query):

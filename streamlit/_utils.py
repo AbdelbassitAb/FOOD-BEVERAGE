@@ -1,13 +1,39 @@
+import os
 import streamlit as st
 import pandas as pd
 import snowflake.connector
 
 # ------------------------------------------------------------
-# Connexion Snowflake (LOCAL) via .streamlit/secrets.toml
+# Snowflake connection configuration
 # ------------------------------------------------------------
+
+def load_snowflake_config():
+    if "snowflake" in st.secrets:
+        return st.secrets["snowflake"]
+
+    env_cfg = {
+        "account": os.getenv("SNOWFLAKE_ACCOUNT"),
+        "user": os.getenv("SNOWFLAKE_USER"),
+        "password": os.getenv("SNOWFLAKE_PASSWORD"),
+        "role": os.getenv("SNOWFLAKE_ROLE"),
+        "warehouse": os.getenv("SNOWFLAKE_WAREHOUSE"),
+        "database": os.getenv("SNOWFLAKE_DATABASE"),
+        "schema": os.getenv("SNOWFLAKE_SCHEMA"),
+    }
+
+    if env_cfg["account"] and env_cfg["user"] and env_cfg["password"]:
+        return env_cfg
+
+    raise KeyError(
+        "Snowflake credentials not found. Set st.secrets['snowflake'] or the environment variables "
+        "SNOWFLAKE_ACCOUNT, SNOWFLAKE_USER, SNOWFLAKE_PASSWORD, SNOWFLAKE_WAREHOUSE, "
+        "SNOWFLAKE_DATABASE, SNOWFLAKE_SCHEMA."
+    )
+
+
 @st.cache_resource
 def get_conn():
-    cfg = st.secrets["snowflake"]
+    cfg = load_snowflake_config()
     conn = snowflake.connector.connect(
         account=cfg["account"],
         user=cfg["user"],
