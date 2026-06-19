@@ -62,7 +62,7 @@ def run_query(sql: str) -> pd.DataFrame:
 
 
 # ------------------------------------------------------------
-# Helpers formatting & casting (ceux qui te manquent)
+# Helpers formatting & casting
 # ------------------------------------------------------------
 def safe_float(x, default=0.0):
     try:
