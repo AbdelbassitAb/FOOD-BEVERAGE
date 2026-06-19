@@ -3,6 +3,5 @@
 SELECT *
 FROM SILVER.CUSTOMER_SERVICE_INTERACTIONS_CLEAN
 WHERE interaction_id IS NULL
-   OR customer_id IS NULL
    OR interaction_date IS NULL
-   OR (satisfaction_score IS NOT NULL AND (satisfaction_score < 0 OR satisfaction_score > 10));
+   OR (customer_satisfaction IS NOT NULL AND (customer_satisfaction < 1 OR customer_satisfaction > 5));
