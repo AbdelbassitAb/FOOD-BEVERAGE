@@ -41,6 +41,30 @@ Data source: `s3://logbrain-datalake/datasets/food-beverage/`
 
 ---
 
+## 2.1 Snowflake app screenshots
+
+The following screenshots show key Snowflake views used in the project.
+
+### Overview
+
+![Snowflake overview](images/Overview.png)
+
+This screenshot shows the Snowflake worksheet and the database/schema organization used for the project.
+
+### Sales analysis
+
+![Sales analysis](images/Sales.png)
+
+This screenshot highlights sales-related analytics queries and the cleaned `SILVER.FINANCIAL_TRANSACTIONS_CLEAN` dataset.
+
+### Promotion analysis
+
+![Promotion analysis](images/Promotion.png)
+
+This screenshot illustrates promotion impact reporting and the Snowflake worksheet used to validate promotional cleaning logic.
+
+---
+
 ## 3) Phase 1 – Data Preparation & Ingestion (Snowflake)
 
 ### 3.1 Step 1 — Snowflake environment setup
