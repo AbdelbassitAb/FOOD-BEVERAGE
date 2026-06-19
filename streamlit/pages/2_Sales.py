@@ -17,13 +17,13 @@ ORDER BY month;
 
 if not df_month.empty:
     df_month["MONTH"] = pd.to_datetime(df_month["MONTH"])
-    st.caption("Total Sales (mensuel) — line chart")
-    st.line_chart(df_month.set_index("MONTH")[["TOTAL_SALES"]])
+st.caption("Total Sales (monthly) — line chart")
+st.line_chart(df_month.set_index("MONTH")[["TOTAL_SALES"]])
 
-    st.caption("Nombre de ventes (mensuel) — line chart")
-    st.line_chart(df_month.set_index("MONTH")[["NB_SALES"]])
+st.caption("Number of sales (monthly) — line chart")
+st.line_chart(df_month.set_index("MONTH")[["NB_SALES"]])
 else:
-    st.info("Pas de données ventes.")
+    st.info("No sales data.")
 
 st.divider()
 
@@ -34,10 +34,10 @@ GROUP BY transaction_type
 ORDER BY total_amount DESC;
 """)
 
-st.caption("Montant total par type de transaction — bar chart")
+st.caption("Total amount by transaction type — bar chart")
 if not df_types.empty:
     st.bar_chart(df_types.set_index("TRANSACTION_TYPE")[["TOTAL_AMOUNT"]])
 
-with st.expander("Voir tables"):
+with st.expander("View tables"):
     st.dataframe(df_month, use_container_width=True)
     st.dataframe(df_types, use_container_width=True)

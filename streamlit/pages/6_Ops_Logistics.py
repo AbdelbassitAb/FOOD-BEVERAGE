@@ -31,19 +31,19 @@ df_delivery["AVG_DELIVERY_DAYS"] = df_delivery["AVG_DELIVERY_DAYS"].astype(float
 left, right = st.columns(2)
 
 with left:
-    st.caption("Alertes stock par catégorie — bar chart")
+    st.caption("Stock alerts by category — bar chart")
     if not df_stock_cat.empty:
         st.bar_chart(df_stock_cat.set_index("PRODUCT_CATEGORY")[["NB_STOCK_ALERTS"]])
     else:
-        st.info("Pas d'alertes stock détectées.")
+        st.info("No stock alerts detected.")
 
 with right:
-    st.caption("Délais moyens de livraison (jours) par statut — bar chart")
+    st.caption("Average delivery days by status — bar chart")
     if not df_delivery.empty:
         st.bar_chart(df_delivery.set_index("STATUS")[["AVG_DELIVERY_DAYS"]])
     else:
-        st.info("Pas de données délais livraison.")
+        st.info("No delivery data.")
 
-with st.expander("Voir tables"):
+with st.expander("View tables"):
     st.dataframe(df_stock_cat, use_container_width=True)
     st.dataframe(df_delivery, use_container_width=True)

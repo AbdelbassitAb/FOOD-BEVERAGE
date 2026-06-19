@@ -37,13 +37,15 @@ flagged AS (
 SELECT AVG(is_promo)::FLOAT AS promo_rate
 FROM flagged;
 """)
-promo_rate = safe_float(promo_rate_df.loc[0, "PROMO_RATE"]) if not promo_rate_df.empty else 0.0
+promo_rate = (
+    safe_float(promo_rate_df.loc[0, "PROMO_RATE"]) if not promo_rate_df.empty else 0.0
+)
 
 c1, c2, c3, c4 = st.columns(4)
 c1.metric("Total Sales", fmt_money(total_sales))
-c2.metric("Nb ventes (Sale)", f"{nb_sales:,}".replace(",", " "))
-c3.metric("Nb régions", f"{nb_regions:,}".replace(",", " "))
-c4.metric("Part ventes en période promo", f"{promo_rate*100:.1f}%")
+c2.metric("Number of sales (Sale)", f"{nb_sales:,}".replace(",", " "))
+c3.metric("Number of regions", f"{nb_regions:,}".replace(",", " "))
+c4.metric("Share of sales during promo period", f"{promo_rate*100:.1f}%")
 
 st.divider()
 
@@ -67,20 +69,20 @@ ORDER BY total_sales DESC;
 left, right = st.columns(2)
 
 with left:
-    st.caption("Tendance des ventes (mensuel) — line chart")
+    st.caption("Sales trend (monthly) — line chart")
     if not df_month.empty:
         df_month["MONTH"] = pd.to_datetime(df_month["MONTH"])
         st.line_chart(df_month.set_index("MONTH")[["TOTAL_SALES"]])
     else:
-        st.info("Pas de données ventes.")
+        st.info("No sales data.")
 
 with right:
-    st.caption("Ventes par région — bar chart")
+    st.caption("Sales by region — bar chart")
     if not df_regions.empty:
         st.bar_chart(df_regions.set_index("REGION")[["TOTAL_SALES"]])
     else:
-        st.info("Pas de données régions.")
+        st.info("No regional data.")
 
-with st.expander("Voir les données"):
+with st.expander("View the data"):
     st.dataframe(df_month, use_container_width=True)
     st.dataframe(df_regions, use_container_width=True)

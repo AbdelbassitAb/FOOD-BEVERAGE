@@ -1,7 +1,7 @@
 # AnyCompany Food & Beverage – Data-Driven Marketing Analytics (Snowflake + Streamlit + ML)
 
-Projet réalisé dans le cadre du workshop **Data-Driven Marketing Analytics avec Snowflake et Streamlit**.  
-Objectif : construire un socle analytique fiable (ingestion + nettoyage), produire des analyses business, puis industrialiser ces analyses sous forme de **data product** prêt pour la BI et le Machine Learning.
+Project completed as part of the **Data-Driven Marketing Analytics with Snowflake and Streamlit** workshop.  
+Goal: build a reliable analytics foundation (ingestion + cleaning), produce business-ready analyses, and industrialize those insights as a **data product** ready for BI and Machine Learning.
 
 ## 🔐 Snowflake access
 
@@ -13,40 +13,41 @@ This project does not include live Snowflake credentials. Configure your own con
 - **Database** : set via `streamlit/.streamlit/secrets.toml` or environment variables
 - **Warehouse** : set via `streamlit/.streamlit/secrets.toml` or environment variables
 
+## 1) Business context & objectives
 
+AnyCompany (fictitious company) is facing:
 
-## 1) Contexte & objectif business
+- a decline in sales over the last fiscal year,
+- a 30% reduction in marketing budget,
+- a loss of market share (28% → 22% in 8 months).
 
-AnyCompany (entreprise fictive) subit :
-- une baisse de ventes sur le dernier exercice fiscal,
-- une réduction de 30% du budget marketing,
-- une perte de part de marché (28% → 22% en 8 mois).
+**Objective**: shift marketing toward a data-driven strategy to:
 
-**Objectif** : réorienter le marketing vers une approche data-driven afin de :
-- inverser la tendance,
-- viser **+10 points de part de marché** (22% → 32%) d’ici T4 2025,
-- optimiser les actions avec un budget réduit.
+- reverse the trend,
+- target **+10 market share points** (22% → 32%) by Q4 2025,
+- optimize actions with a reduced budget.
 
 ---
 
-## 2) Architecture et approche
+## 2) Architecture and approach
 
-Nous avons construit une architecture en 3 couches :
+The architecture is built as a 3-layer design:
 
-- **BRONZE** : données brutes (raw) issues des fichiers CSV/JSON
-- **SILVER** : données nettoyées, cohérentes et exploitables
-- **ANALYTICS** : data product (tables stables avec KPIs et flags utiles)
+- **BRONZE**: raw data from CSV/JSON files
+- **SILVER**: cleaned, consistent, and usable data
+- **ANALYTICS**: data product (stable tables with KPIs and useful flags)
 
-Source des données : `s3://logbrain-datalake/datasets/food-beverage/`
+Data source: `s3://logbrain-datalake/datasets/food-beverage/`
 
 ---
 
 ## 3) Phase 1 – Data Preparation & Ingestion (Snowflake)
 
-### 3.1 Étape 1 — Préparation de l’environnement Snowflake
+### 3.1 Step 1 — Snowflake environment setup
 
-#### 3.1.1 Création du warehouse
-Un warehouse `XSMALL` a été utilisé pour limiter la consommation de crédits, avec auto-suspend activé.
+#### 3.1.1 Warehouse creation
+
+An `XSMALL` warehouse was used to limit credit consumption, with auto-suspend enabled.
 
 ```sql
 CREATE OR REPLACE WAREHOUSE WH_LAB
@@ -58,8 +59,10 @@ WITH
 USE WAREHOUSE WH_LAB;
 ```
 
-#### 3.1.2 Création de la base et des schémas
-Nous avons créé une base dédiée au lab, puis 3 schémas :
+#### 3.1.2 Create database and schemas
+
+A dedicated lab database was created, along with 3 schemas:
+
 - `BRONZE` (raw)
 - `SILVER` (clean)
 - `ANALYTICS` (data product)
@@ -74,11 +77,11 @@ CREATE OR REPLACE SCHEMA ANYCOMPANY_LAB.ANALYTICS;
 
 ---
 
-### 3.2 Étape 2 — File formats & Stage S3
+### 3.2 Step 2 — File formats & S3 stage
 
-#### 3.2.1 Formats de fichiers
+#### 3.2.1 File formats
 
-**CSV standard** (délimiteur virgule) :
+**Standard CSV** (comma delimiter):
 
 ```sql
 CREATE OR REPLACE FILE FORMAT FF_CSV
@@ -90,9 +93,9 @@ CREATE OR REPLACE FILE FORMAT FF_CSV
   NULL_IF = ('', 'NULL');
 ```
 
-**TSV (tabulation)** : utilisé pour `product_reviews.csv` car le fichier était en réalité séparé par tabulations.  
-Sans cela, on obtenait l’erreur : *"Number of columns in file does not match table"*.  
-Nous avons ajouté `ERROR_ON_COLUMN_COUNT_MISMATCH = FALSE` pour éviter l’échec complet du chargement.
+**TSV (tab-delimited)**: used for `product_reviews.csv` because the file was actually tab-separated.  
+Without this setting, the error _"Number of columns in file does not match table"_ occurred.  
+`ERROR_ON_COLUMN_COUNT_MISMATCH = FALSE` was added to avoid a complete load failure.
 
 ```sql
 CREATE OR REPLACE FILE FORMAT FF_TSV
@@ -105,7 +108,7 @@ CREATE OR REPLACE FILE FORMAT FF_TSV
   ERROR_ON_COLUMN_COUNT_MISMATCH = FALSE;
 ```
 
-**JSON** : les JSON fournis étaient sous forme de tableau → `STRIP_OUTER_ARRAY = TRUE`.
+**JSON**: the supplied JSON files were arrays, so `STRIP_OUTER_ARRAY = TRUE` was required.
 
 ```sql
 CREATE OR REPLACE FILE FORMAT FF_JSON
@@ -113,7 +116,8 @@ CREATE OR REPLACE FILE FORMAT FF_JSON
   STRIP_OUTER_ARRAY = TRUE;
 ```
 
-#### 3.2.2 Stage S3
+#### 3.2.2 S3 Stage
+
 ```sql
 CREATE OR REPLACE STAGE STG_FOOD_BEVERAGE
   URL = 's3://logbrain-datalake/datasets/food-beverage/'
@@ -124,15 +128,15 @@ LIST @STG_FOOD_BEVERAGE;
 
 ---
 
-### 3.3 Étape 2 — Création des tables BRONZE (raw)
+### 3.3 Step 2 — Create BRONZE tables (raw)
 
-Une table BRONZE a été créée pour chaque fichier.  
-Pour les JSON, nous avons stocké les lignes dans une colonne `VARIANT` (`raw`).
+A BRONZE table was created for each file.  
+For JSON files, we stored the records in a `raw VARIANT` column.
 
-Exemples :
+Examples:
 
-- **CSV** : types adaptés aux analyses (DATE, NUMBER(18,2), etc.)
-- **JSON** : table `raw VARIANT`
+- **CSV**: types adapted for analysis (DATE, NUMBER(18,2), etc.)
+- **JSON**: `raw VARIANT` table
 
 ```sql
 CREATE OR REPLACE TABLE BRONZE.INVENTORY_RAW ( raw VARIANT );
@@ -141,11 +145,11 @@ CREATE OR REPLACE TABLE BRONZE.STORE_LOCATIONS_RAW ( raw VARIANT );
 
 ---
 
-### 3.4 Étape 3 — Chargement des données (COPY INTO)
+### 3.4 Step 3 — Load data (COPY INTO)
 
-Pour chaque table BRONZE, nous avons chargé les données depuis le stage S3 avec `COPY INTO`, en utilisant le `FILE_FORMAT` adapté.
+For each BRONZE table, data was loaded from the S3 stage using `COPY INTO` with the appropriate `FILE_FORMAT`.
 
-Exemples :
+Examples:
 
 ```sql
 COPY INTO BRONZE.CUSTOMER_DEMOGRAPHICS
@@ -154,7 +158,7 @@ FILE_FORMAT = (FORMAT_NAME = FF_CSV)
 ON_ERROR = 'CONTINUE';
 ```
 
-`product_reviews.csv` (TSV) :
+`product_reviews.csv` (TSV):
 
 ```sql
 COPY INTO BRONZE.PRODUCT_REVIEWS
@@ -163,7 +167,7 @@ FILE_FORMAT = (FORMAT_NAME = FF_TSV)
 ON_ERROR = 'CONTINUE';
 ```
 
-JSON :
+JSON:
 
 ```sql
 COPY INTO BRONZE.INVENTORY_RAW
@@ -172,7 +176,8 @@ FILE_FORMAT = (FORMAT_NAME = FF_JSON)
 ON_ERROR = 'CONTINUE';
 ```
 
-#### Vérification COPY (historique)
+#### COPY verification (history)
+
 ```sql
 SELECT *
 FROM TABLE(
@@ -185,15 +190,16 @@ FROM TABLE(
 
 ---
 
-### 3.5 Étape 4 — Vérifications post-chargement (BRONZE)
+### 3.5 Step 4 — Post-load checks (BRONZE)
 
-Après chaque chargement, nous avons systématiquement :
-- vérifié les **volumes** (table vide / chargement partiel),
-- inspecté un **échantillon** (`LIMIT 10`),
-- identifié les **colonnes clés** (IDs, dates, régions, catégories),
-- détecté les anomalies évidentes (valeurs négatives, dates invalides, etc.).
+After each load, we systematically:
 
-Exemple de contrôle volume global :
+- checked **volumes** (empty table / partial load),
+- reviewed a **sample** (`LIMIT 10`),
+- identified **key columns** (IDs, dates, regions, categories),
+- detected obvious anomalies (negative values, invalid dates, etc.).
+
+Example global volume check:
 
 ```sql
 SELECT 'CUSTOMER_DEMOGRAPHICS' AS table_name, COUNT(*) AS nb_rows FROM BRONZE.CUSTOMER_DEMOGRAPHICS
@@ -204,37 +210,37 @@ ORDER BY table_name;
 
 ---
 
-## 4) Phase 1 – Étape 5 : Data Cleaning (BRONZE → SILVER)
+## 4) Phase 1 – Step 5: Data Cleaning (BRONZE → SILVER)
 
-### 4.1 Principes de nettoyage appliqués
+### 4.1 Applied cleaning principles
 
-Pour chaque table BRONZE, nous avons créé une table SILVER en appliquant :
+For each BRONZE table, a SILVER table was created using:
 
-1. **Nettoyage des champs texte**
-   - `TRIM()`, `NULLIF(TRIM(x), '')` pour éviter les chaînes vides
-2. **Harmonisation des types**
-   - Dates : `TRY_TO_DATE(...)`
-   - Numériques : `TRY_TO_DECIMAL(...)`, suppression des espaces (`REPLACE(x,' ','')`)
-3. **Règles de qualité**
-   - montants positifs (transactions)
-   - discount entre 0 et 1 (promotions)
-   - rating entre 1 et 5 (reviews)
-   - coûts de shipping >= 0
+1. **Text cleanup**
+   - `TRIM()`, `NULLIF(TRIM(x), '')` to avoid empty strings
+2. **Type harmonization**
+   - Dates: `TRY_TO_DATE(...)`
+   - Numerics: `TRY_TO_DECIMAL(...)`, removing spaces with `REPLACE(x,' ','')`
+3. **Quality rules**
+   - positive amounts (transactions)
+   - discount between 0 and 1 (promotions)
+   - rating between 1 and 5 (reviews)
+   - shipping costs >= 0
    - lead_time, stock, reorder_point >= 0
-4. **Gestion des doublons (IDs)**
-   - Règle générale : **si un ID est censé être unique, on dédoublonne**
-   - Méthode : `QUALIFY ROW_NUMBER()` avec un critère métier (date la plus récente ou “ligne la plus complète”)
-5. **Suppression des lignes avec la region 0 et 1 dans la table PROMOTION**
+4. **Duplicate handling (IDs)**
+   - General rule: **if an ID should be unique, deduplicate it**
+   - Method: `QUALIFY ROW_NUMBER()` using a business rule (most recent date or most complete row)
+5. **Remove rows with region 0 and 1 in the PROMOTIONS table**
 
 ---
 
-### 4.2 Exemple : Financial Transactions
+### 4.2 Example: Financial Transactions
 
-**Objectif** : sécuriser la base de ventes (montants exploitables, IDs uniques, dates valides).
+**Objective**: secure the sales base with usable amounts, unique IDs, and valid dates.
 
-- Dédoublonnage sur `transaction_id`
-- Conversion robuste du montant
-- Suppression des montants nuls ou négatifs
+- Deduplicate on `transaction_id`
+- Robust amount conversion
+- Remove null or negative amounts
 
 ```sql
 CREATE OR REPLACE TABLE SILVER.FINANCIAL_TRANSACTIONS_CLEAN AS
@@ -260,11 +266,11 @@ WHERE amount IS NULL OR amount <= 0;
 
 ---
 
-### 4.3 Exemple : Promotions
+### 4.3 Example: Promotions
 
-- validation de la période (start_date <= end_date)
-- discount entre 0 et 1
-- Suppression des lignes avec region 0 et 1.
+- validate the period (`start_date <= end_date`)
+- discount between 0 and 1
+- remove rows with region 0 and 1
 
 ```sql
 CREATE OR REPLACE TABLE SILVER.PROMOTIONS_CLEAN AS
@@ -291,38 +297,46 @@ QUALIFY ROW_NUMBER() OVER (
 
 ---
 
-### 4.4 Cas particulier important : STORE_LOCATIONS (IDs dupliqués)
+### 4.4 Important special case: STORE_LOCATIONS (duplicated IDs)
 
-#### Constat
-Dans la table `BRONZE.STORE_LOCATIONS_RAW`, nous avions environ **5000 lignes**.  
-Après nettoyage et dédoublonnage par `store_id`, il ne restait que **897 lignes**, donc **~82% des données supprimées**.
+#### Observation
 
-Cela signifie que :
-- les `store_id` étaient fortement dupliqués,
-- MAIS les lignes associées à un même `store_id` avaient **des valeurs différentes** (donc ce ne sont pas de vrais doublons).
+In `BRONZE.STORE_LOCATIONS_RAW`, there were about **5000 rows**.  
+After cleaning and deduplicating by `store_id`, only **897 rows** remained, meaning **~82% of rows were removed**.
 
-#### Alternatives envisagées
-Nous avons envisagé des approches plus avancées :
+This indicates that:
 
-1) **Changer l’identifiant**
-- créer un identifiant technique (surrogate key) : `store_id + hash(address + city + country)`
-- permet de conserver toutes les lignes
+- `store_id` values were heavily duplicated,
+- BUT rows with the same `store_id` had **different values** (so these were not true duplicates).
 
-2) **Créer des versions (SCD Type 2)**
-- conserver l’historique des changements avec `valid_from / valid_to`
-- nécessite un champ date fiable (par exemple `updated_at`)
+#### Alternative approaches considered
 
-#### Pourquoi nous ne les avons pas retenues
-Les données du workshop sont **générées** et ne contiennent **pas de champ date** (ex : updated_at) permettant de gérer les versions correctement.  
-Sans date, il est impossible de savoir :
-- quelle ligne est la version “courante”
-- quelle ligne est la version “ancienne”
+We considered more advanced approaches:
 
-#### Décision finale
-Nous avons choisi une approche simple et cohérente avec l’objectif pédagogique :
+1. **Change the identifier**
 
-✅ **Dédoublonner sur `store_id` en gardant la ligne la plus complète**  
-(méthode `completeness_score` + `ROW_NUMBER()`)
+- create a technical surrogate key: `store_id + hash(address + city + country)`
+- this preserves all rows
+
+2. **Create versions (SCD Type 2)**
+
+- keep history with `valid_from / valid_to`
+- requires a reliable date field (for example `updated_at`)
+
+#### Why these were not selected
+
+The workshop data is **synthetic** and does not include a reliable date field (e.g. `updated_at`) to manage versions correctly.  
+Without a date, it is impossible to know:
+
+- which row is the “current” version
+- which row is the “historical” version
+
+#### Final decision
+
+We chose a simple approach aligned with the learning objective:
+
+✅ **Deduplicate on `store_id` while keeping the most complete row**  
+(using `completeness_score` + `ROW_NUMBER()`)
 
 ```sql
 CREATE OR REPLACE TABLE SILVER.STORE_LOCATIONS_CLEAN AS
@@ -364,56 +378,64 @@ QUALIFY ROW_NUMBER() OVER (
 
 ---
 
-## 5) Phase 2 – Analyses exploratoires & business (SILVER)
+## 5) Phase 2 – Exploratory & business analysis (SILVER)
 
-Les analyses ont été réalisées à partir des tables SILVER, en couvrant :
-- évolution des ventes dans le temps,
-- performance par région,
-- impact promotions (par région + période),
-- ROI proxy des campagnes,
-- ratings par catégorie,
-- SAV (satisfaction),
-- ruptures de stock,
-- délais de livraison.
+The analyses were performed using SILVER tables, covering:
 
-Les scripts SQL sont regroupés dans `sql/` (1 fichier par analyse).
+- sales trends over time,
+- regional performance,
+- promotion impact (by region + period),
+- campaign proxy ROI,
+- ratings by category,
+- customer service (satisfaction),
+- stock outages,
+- delivery lead times.
+
+The SQL scripts are grouped in `sql/` (one file per analysis).
 
 ---
 
 ## 6) Phase 3 – Data Product (ANALYTICS)
 
-### Objectif  
-Industrialiser les insights issus de la Phase 2 en **tables analytiques réutilisables**, stables et prêtes à être consommées par :
-- des dashboards (Streamlit / BI),
-- des analyses avancées,
-- des modèles de Machine Learning.
+### Objective
 
-Cette phase correspond à un travail d’**Analytics Engineering** : on transforme des analyses ponctuelles en **produits data durables**.
+Industrialize the Phase 2 insights into **reusable analytical tables** that are stable and ready to be consumed by:
+
+- dashboards (Streamlit / BI),
+- advanced analytics,
+- Machine Learning models.
+
+This phase is an **Analytics Engineering** effort: turning ad hoc analyses into **durable data products**.
 
 ---
 
-### Tables créées dans le schéma `ANALYTICS`
+### Tables created in the `ANALYTICS` schema
 
 #### `ANALYTICS.SALES_ENRICHED`
-**Objectif métier**  
-Centraliser les ventes et les enrichir avec des indicateurs marketing afin de mesurer l’impact réel :
-- des promotions,
-- des campagnes marketing,
-- du facteur temps.
 
-**Contenu**
-- Données de vente (transaction, date, région, montant)
-- Flags analytiques :
-  - période de promotion
-  - période de campagne
-- Variables temporelles (mois, jour de la semaine)
+**Business goal**  
+Centralize sales and enrich them with marketing indicators to measure the real impact of:
 
-**Cas d’usage**
-- Analyse ROI marketing
-- Comparaison ventes avec / sans promotion
-- Base pour modèles de prévision des ventes
+- promotions,
+- marketing campaigns,
+- time.
 
-**Tables sources utilisées**
+**Contents**
+
+- Sales data (transaction, date, region, amount)
+- Analytical flags:
+  - promotion period
+  - campaign period
+- Time-based variables (month, day of week)
+
+**Use cases**
+
+- marketing ROI analysis
+- sales comparison with/without promotion
+- base for sales forecasting models
+
+**Source tables used**
+
 - `SILVER.FINANCIAL_TRANSACTIONS_CLEAN`
 - `SILVER.PROMOTIONS_CLEAN`
 - `SILVER.MARKETING_CAMPAIGNS_CLEAN`
@@ -421,47 +443,56 @@ Centraliser les ventes et les enrichir avec des indicateurs marketing afin de me
 ---
 
 #### `ANALYTICS.ACTIVE_PROMOTIONS`
-**Objectif métier**  
-Disposer d’une table normalisée des promotions pour analyser leur efficacité selon :
-- la catégorie produit,
-- la région,
-- la durée.
 
-**Contenu**
-- Promotion, catégorie, région
-- Discount appliqué
-- Dates de début et de fin
-- Durée de la promotion (en jours)
+**Business goal**  
+Provide a normalized table of promotions to analyze their effectiveness by:
 
-**Cas d’usage**
-- Analyse de la sensibilité aux promotions
-- Optimisation du calendrier promotionnel
+- product category,
+- region,
+- duration.
 
-**Tables sources utilisées**
+**Contents**
+
+- promotion, category, region
+- applied discount
+- start and end dates
+- promotion duration (in days)
+
+**Use cases**
+
+- promotion sensitivity analysis
+- promotional calendar optimization
+
+**Source tables used**
+
 - `SILVER.PROMOTIONS_CLEAN`
 
 ---
 
 #### `ANALYTICS.CUSTOMERS_ENRICHED`
-**Objectif métier**  
-Créer une table client enrichie pour permettre une **segmentation marketing avancée**.
 
-**Contenu**
-- Informations démographiques
-- Âge calculé
-- Segment de revenu (Low / Medium / High)
+**Business goal**  
+Create an enriched customer table to enable **advanced marketing segmentation**.
 
-**Cas d’usage**
-- Ciblage marketing
-- Scoring client
-- Base pour modèles de churn ou de valeur client
+**Contents**
 
-**Tables sources utilisées**
+- demographic information
+- calculated age
+- income segment (Low / Medium / High)
+
+**Use cases**
+
+- marketing targeting
+- customer scoring
+- base for churn or customer value models
+
+**Source tables used**
+
 - `SILVER.CUSTOMER_DEMOGRAPHICS_CLEAN`
 
 ---
 
-### Exemple : création de `ANALYTICS.SALES_ENRICHED`
+### Example: creating `ANALYTICS.SALES_ENRICHED`
 
 ```sql
 CREATE OR REPLACE TABLE ANALYTICS.SALES_ENRICHED AS
@@ -500,58 +531,59 @@ LEFT JOIN promo_flag p ON s.transaction_id = p.transaction_id
 LEFT JOIN campaign_flag c ON s.transaction_id = c.transaction_id;
 ```
 
-### Résultat de la Phase 3
+### Phase 3 results
 
-À l’issue de cette phase, le projet dispose :
+At the end of this phase, the project has:
 
-- d’un **Data Product analytique cohérent**, construit à partir de données nettoyées et validées ;
-- de **tables analytiques documentées et réutilisables**, centralisées dans le schéma `ANALYTICS` ;
-- d’un **socle data prêt à l’emploi** pour :
-  - la création de dashboards décisionnels avec **Streamlit**,
-  - des **analyses marketing avancées** (ROI, segmentation, performance des campagnes),
-  - le développement de **modèles de Machine Learning** orientés marketing (segmentation clients, propension à l’achat, réponse aux promotions).
-
+- a **coherent analytical data product**, built from cleaned and validated data;
+- **documented, reusable analytical tables** centralized in the `ANALYTICS` schema;
+- a **ready-to-use data foundation** for:
+  - dashboards with **Streamlit**,
+  - advanced marketing analytics (ROI, segmentation, campaign performance),
+  - marketing-oriented Machine Learning models (customer segmentation, propensity, promotion response).
 
 ---
 
 ## 7) Streamlit (dashboards)
 
-Une page par analyse (multi-pages Streamlit) :
+One page per analysis (Streamlit multi-page app):
+
 - Sales Dashboard
 - Promotion Analysis
 - Marketing ROI
 - Customer Segmentation
 - Operations & Logistics
 
-Connexion Snowflake via `.streamlit/secrets.toml` (non versionné).
+Snowflake connection via `.streamlit/secrets.toml` (not versioned).
 
 ---
-## 8) Structure du projet
+
+## 8) Project structure
 
 ```text
 SNOWFLAKE/
 ├── ml/
 ├── sql/
 │ ├── phase_1/
-│ │ ├── 1_préparation_environnement.sql
-│ │ ├── 2_creation_tables.sql
-│ │ ├── 3_chargement_donnee.sql
-│ │ ├── 4_verification_chargement.sql
+│ │ ├── 1_environment_setup.sql
+│ │ ├── 2_create_tables.sql
+│ │ ├── 3_load_data.sql
+│ │ ├── 4_verify_load.sql
 │ │ └── 5_clean_data.sql
 │ ├── phase_2/
-│ │ ├── 1_comprehension_donné.sql
-│ │ ├── 2_analyses_exploratoires_descriptives.sql
+│ │ ├── 1_data_understanding.sql
+│ │ ├── 2_descriptive_exploratory_analysis.sql
 │ │ ├── 3.1_promotion_impact.sql
 │ │ ├── 3.2_campaign_performance.sql
-│ │ ├── 3.3_experience_client.sql
-│ │ └── 3.4_operation_et_logistique.sql
+│ │ ├── 3.3_customer_experience.sql
+│ │ └── 3.4_operations_and_logistics.sql
 │ └── phase_3/
-│ ├── 1_creation_data_product.sql
-│ └── 2_ml_feature_tables.sql
+│   ├── 1_create_data_product.sql
+│   └── 2_ml_feature_tables.sql
 ├── streamlit/
 │ ├── .streamlit/
 │ │ ├── config.toml
-│ │ └── secrets.toml
+│ │ └── secrets.toml.example
 │ ├── ml_models/
 │ ├── pages/
 │ ├── _utils.py
@@ -563,9 +595,9 @@ SNOWFLAKE/
 └── requirements.txt
 ```
 
-
 ---
-## 9) AI-Powered Promo Planning** - Predict promotion ROI before launch with ML models!
+
+## 9) AI-Powered Promo Planning - Predict promotion ROI before launch with ML models!
 
 ---
 
@@ -589,24 +621,23 @@ python -m streamlit run Home.py
 
 ---
 
+## 10) Notes and limitations
 
-## 10) Notes et limites
-
-- Les données étant **générées**, certaines clés (ex : `store_id`) ne reflètent pas toujours une logique métier réaliste.
-- Absence de `customer_id` dans les transactions : les analyses ventes/clients restent séparées.
-- Absence de `product_id` dans les ventes : analyses produit effectuées par proxy (catégorie/région/période).
+- The data is **synthetic**, so some keys (e.g. `store_id`) do not always reflect realistic business logic.
+- `customer_id` is missing from transactions, so sales and customer analyses remain separate.
+- `product_id` is missing from sales, so product analyses are done by proxy (category/region/period).
 
 ---
 
-## 11) Lancer l’app Streamlit
+## 11) Run the Streamlit app
 
-Depuis la dossier streamlit :
+From the `streamlit` folder:
 
 ```bash
 streamlit run Home.py
 ```
 
-Ou bien vous pouvez copiez le code complet de l'app disponible dans le fichier `app_streamlit.py` directement dans snowflake.
-Ce code regroupe toutes les pages demandées dans les instructions.
+Or you can copy the full app code available in the file `streamlit/app_streamlit.py` directly into Snowflake.
+This file contains all requested pages in a single app.
 
 ---

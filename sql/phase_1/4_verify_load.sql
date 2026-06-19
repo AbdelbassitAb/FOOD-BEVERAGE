@@ -1,9 +1,9 @@
 -- ============================================================
--- ÉTAPE 4 – VÉRIFICATIONS (BRONZE & JSON RAW)
--- Objectifs :
--- 1) Vérifier le nombre de lignes
--- 2) Inspecter un échantillon (SELECT * LIMIT 10)
--- 3) Identifier les colonnes clés (IDs, dates, produits, régions)
+-- STEP 4 – VERIFICATIONS (BRONZE & JSON RAW)
+-- Objectives:
+-- 1) Verify row counts
+-- 2) Inspect a sample (SELECT * LIMIT 10)
+-- 3) Identify key columns (IDs, dates, products, regions)
 -- ============================================================
 
 USE DATABASE ANYCOMPANY_LAB;
@@ -11,8 +11,8 @@ USE SCHEMA BRONZE;
 -- USE WAREHOUSE WH_LAB;
 
 -- ------------------------------------------------------------
--- 0) VÉRIFICATION DES VOLUMES (toutes les tables BRONZE)
--- => Permet de détecter une table vide ou un chargement partiel
+-- 0) VOLUME CHECK (all BRONZE tables)
+-- => Helps detect empty tables OR partial loads
 -- ------------------------------------------------------------
 SELECT 'CUSTOMER_DEMOGRAPHICS' AS table_name, COUNT(*) AS nb_rows FROM BRONZE.CUSTOMER_DEMOGRAPHICS
 UNION ALL SELECT 'CUSTOMER_SERVICE_INTERACTIONS', COUNT(*) FROM BRONZE.CUSTOMER_SERVICE_INTERACTIONS
@@ -28,33 +28,33 @@ UNION ALL SELECT 'STORE_LOCATIONS_RAW', COUNT(*) FROM BRONZE.STORE_LOCATIONS_RAW
 ORDER BY table_name;
 
 -- ------------------------------------------------------------
--- 1) CUSTOMER_DEMOGRAPHICS – Échantillon + colonnes clés
--- Clés : customer_id (ID), date_of_birth (date), region/country/city (géographie)
+-- 1) CUSTOMER_DEMOGRAPHICS – Sample + key columns
+-- Keys: customer_id (ID), date_of_birth (date), region/country/city (geography)
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.CUSTOMER_DEMOGRAPHICS LIMIT 10;
 
--- IDs : unicité / doublons éventuels
+-- IDs: uniqueness / possible duplicates
 SELECT
   COUNT(*) AS total_rows,
   COUNT(DISTINCT customer_id) AS distinct_customer_id,
   COUNT(*) - COUNT(DISTINCT customer_id) AS duplicate_customer_id
 FROM BRONZE.CUSTOMER_DEMOGRAPHICS;
 
--- Dates : période couverte
+-- Dates: covered period
 SELECT
   MIN(TRY_TO_DATE(date_of_birth::VARCHAR)) AS min_dob,
   MAX(TRY_TO_DATE(date_of_birth::VARCHAR)) AS max_dob
 FROM BRONZE.CUSTOMER_DEMOGRAPHICS;
 
--- Régions : valeurs distinctes (utile pour segmentations)
+-- Regions: DISTINCT VALUES (useful for segmentation)
 SELECT region, COUNT(*) AS cnt
 FROM BRONZE.CUSTOMER_DEMOGRAPHICS
 GROUP BY region
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 2) CUSTOMER_SERVICE_INTERACTIONS – Échantillon + colonnes clés
--- Clés : interaction_id (ID), interaction_date (date)
+-- 2) CUSTOMER_SERVICE_INTERACTIONS – Sample + key columns
+-- Keys: interaction_id (ID), interaction_date (date)
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.CUSTOMER_SERVICE_INTERACTIONS LIMIT 10;
 
@@ -69,15 +69,15 @@ SELECT
   MAX(TRY_TO_DATE(interaction_date::VARCHAR)) AS max_date
 FROM BRONZE.CUSTOMER_SERVICE_INTERACTIONS;
 
--- Types/catégories (utile pour analyse expérience client)
+-- Types/categories (useful for customer experience analysis)
 SELECT issue_category, COUNT(*) AS cnt
 FROM BRONZE.CUSTOMER_SERVICE_INTERACTIONS
 GROUP BY issue_category
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 3) FINANCIAL_TRANSACTIONS – Échantillon + colonnes clés
--- Clés : transaction_id (ID), transaction_date (date), region (géographie), amount (mesure)
+-- 3) FINANCIAL_TRANSACTIONS – Sample + key columns
+-- Keys: transaction_id (ID), transaction_date (date), region (geography), amount (measure)
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.FINANCIAL_TRANSACTIONS LIMIT 10;
 
@@ -97,15 +97,15 @@ FROM BRONZE.FINANCIAL_TRANSACTIONS
 GROUP BY region
 ORDER BY cnt DESC;
 
--- Contrôle rapide montants (anomalies/NULLs)
+-- Quick amount check (anomalies/NULLs)
 SELECT
   SUM(IFF(amount IS NULL, 1, 0)) AS null_amount,
   SUM(IFF(TRY_TO_DECIMAL(REPLACE(amount::VARCHAR,' ',''),18,2) IS NULL AND amount IS NOT NULL, 1, 0)) AS not_parsable_amount
 FROM BRONZE.FINANCIAL_TRANSACTIONS;
 
 -- ------------------------------------------------------------
--- 4) PROMOTIONS_DATA – Échantillon + colonnes clés
--- Clés : promotion_id (ID), start_date/end_date (dates), region (géographie), product_category (produit)
+-- 4) PROMOTIONS_DATA – Sample + key columns
+-- Keys: promotion_id (ID), start_date/end_date (dates), region (geography), product_category (product)
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.PROMOTIONS_DATA LIMIT 10;
 
@@ -131,9 +131,9 @@ GROUP BY region
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 5) MARKETING_CAMPAIGNS – Échantillon + colonnes clés
--- Attention : campaign_id peut ne pas être unique (cas observé)
--- Clés utiles : campaign_id, start_date/end_date, region, product_category, target_audience
+-- 5) MARKETING_CAMPAIGNS – Sample + key columns
+-- Note: campaign_id may NOT be unique (observed CASE)
+-- Useful keys: campaign_id, start_date/end_date, region, product_category, target_audience
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.MARKETING_CAMPAIGNS LIMIT 10;
 
@@ -159,12 +159,12 @@ GROUP BY product_category
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 6) PRODUCT_REVIEWS – Échantillon + colonnes clés
--- Clés : review_id (ID parfois sale), review_date (date), product_id (produit), product_category
+-- 6) PRODUCT_REVIEWS – Sample + key columns
+-- Keys: review_id (possibly dirty ID), review_date (date), product_id (product), product_category
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.PRODUCT_REVIEWS LIMIT 10;
 
--- Unicité review_id si convertible en numérique
+-- Unique review_id if convertible to numeric
 SELECT
   COUNT(*) AS total_rows,
   COUNT(DISTINCT TRY_TO_NUMBER(review_id::VARCHAR)) AS distinct_review_id_numeric
@@ -181,8 +181,8 @@ GROUP BY product_category
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 7) LOGISTICS_AND_SHIPPING – Échantillon + colonnes clés
--- Clés : shipment_id (ID), ship_date/estimated_delivery (dates), destination_region (géographie)
+-- 7) LOGISTICS_AND_SHIPPING – Sample + key columns
+-- Keys: shipment_id (ID), ship_date/estimated_delivery (dates), destination_region (geography)
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.LOGISTICS_AND_SHIPPING LIMIT 10;
 
@@ -203,8 +203,8 @@ GROUP BY destination_region
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 8) SUPPLIER_INFORMATION – Échantillon + colonnes clés
--- Clés : supplier_id (ID), product_category, region/country
+-- 8) SUPPLIER_INFORMATION – Sample + key columns
+-- Keys: supplier_id (ID), product_category, region/country
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.SUPPLIER_INFORMATION LIMIT 10;
 
@@ -225,8 +225,8 @@ GROUP BY region
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 9) EMPLOYEE_RECORDS – Échantillon + colonnes clés
--- Clés : employee_id (ID), hire_date (date), department/region
+-- 9) EMPLOYEE_RECORDS – Sample + key columns
+-- Keys: employee_id (ID), hire_date (date), department/region
 -- ------------------------------------------------------------
 SELECT * FROM BRONZE.EMPLOYEE_RECORDS LIMIT 10;
 
@@ -247,8 +247,8 @@ GROUP BY department
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 10) INVENTORY_RAW (JSON) – Échantillon + colonnes clés
--- Clés : product_id, region/country/warehouse, last_restock_date
+-- 10) INVENTORY_RAW (JSON) – Sample + key columns
+-- Keys: product_id, region/country/warehouse, last_restock_date
 -- ------------------------------------------------------------
 SELECT raw FROM BRONZE.INVENTORY_RAW LIMIT 10;
 
@@ -268,8 +268,8 @@ GROUP BY region
 ORDER BY cnt DESC;
 
 -- ------------------------------------------------------------
--- 11) STORE_LOCATIONS_RAW (JSON) – Échantillon + colonnes clés
--- Clés : store_id, region/country/city
+-- 11) STORE_LOCATIONS_RAW (JSON) – Sample + key columns
+-- Keys: store_id, region/country/city
 -- ------------------------------------------------------------
 SELECT raw FROM BRONZE.STORE_LOCATIONS_RAW LIMIT 10;
 

@@ -1,13 +1,18 @@
 """
 Check which database has the ML tables
 """
+
 import os
 import snowflake.connector
 import toml
 
 
 def load_snowflake_config():
-    if os.getenv("SNOWFLAKE_ACCOUNT") and os.getenv("SNOWFLAKE_USER") and os.getenv("SNOWFLAKE_PASSWORD"):
+    if (
+        os.getenv("SNOWFLAKE_ACCOUNT")
+        and os.getenv("SNOWFLAKE_USER")
+        and os.getenv("SNOWFLAKE_PASSWORD")
+    ):
         return {
             "account": os.getenv("SNOWFLAKE_ACCOUNT"),
             "user": os.getenv("SNOWFLAKE_USER"),
@@ -18,11 +23,11 @@ def load_snowflake_config():
             "schema": os.getenv("SNOWFLAKE_SCHEMA"),
         }
 
-    secrets_path = os.path.join(os.path.dirname(__file__), '.streamlit', 'secrets.toml')
+    secrets_path = os.path.join(os.path.dirname(__file__), ".streamlit", "secrets.toml")
     if os.path.exists(secrets_path):
-        with open(secrets_path, 'r') as f:
+        with open(secrets_path, "r") as f:
             secrets = toml.load(f)
-        return secrets['snowflake']
+        return secrets["snowflake"]
 
     raise EnvironmentError(
         "Snowflake credentials not found. Set the environment variables SNOWFLAKE_ACCOUNT, SNOWFLAKE_USER, "
@@ -34,11 +39,11 @@ cfg = load_snowflake_config()
 
 # Connect
 conn = snowflake.connector.connect(
-    account=cfg['account'],
-    user=cfg['user'],
-    password=cfg['password'],
-    warehouse=cfg.get('warehouse'),
-    role=cfg.get('role', 'SYSADMIN')
+    account=cfg["account"],
+    user=cfg["user"],
+    password=cfg["password"],
+    warehouse=cfg.get("warehouse"),
+    role=cfg.get("role", "SYSADMIN"),
 )
 
 cursor = conn.cursor()
@@ -90,7 +95,7 @@ print("\n4. Checking SILVER tables (needed for ML features)...")
 try:
     cursor.execute("USE DATABASE ANYCOMPANY_LAB")
     cursor.execute("USE SCHEMA SILVER")
-    tables = ['PROMOTIONS', 'TRANSACTIONS', 'CAMPAIGNS']
+    tables = ["PROMOTIONS", "TRANSACTIONS", "CAMPAIGNS"]
     for table in tables:
         try:
             cursor.execute(f"SELECT COUNT(*) FROM {table}")
@@ -110,6 +115,6 @@ print("\nOption 1: Re-run SQL in ANYCOMPANY_LAB database")
 print("   - Change line 7 in 2_ml_feature_tables.sql to:")
 print("   - USE DATABASE ANYCOMPANY_LAB;")
 print("\nOption 2: Update secrets.toml to use ANYCOMPANY_DB")
-print("   - Change database = \"ANYCOMPANY_LAB\" to \"ANYCOMPANY_DB\"")
+print('   - Change database = "ANYCOMPANY_LAB" to "ANYCOMPANY_DB"')
 
 conn.close()

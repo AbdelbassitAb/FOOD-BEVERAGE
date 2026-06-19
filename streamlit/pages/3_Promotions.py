@@ -17,12 +17,12 @@ ORDER BY nb_promos DESC;
 c1, c2 = st.columns(2)
 
 with c1:
-    st.caption("Nombre de promotions par catégorie — bar chart")
+    st.caption("Number of promotions by category — bar chart")
     if not df_cat.empty:
         st.bar_chart(df_cat.set_index("PRODUCT_CATEGORY")[["NB_PROMOS"]])
 
 with c2:
-    st.caption("Discount moyen par catégorie — bar chart")
+    st.caption("Average discount by category — bar chart")
     if not df_cat.empty:
         st.bar_chart(df_cat.set_index("PRODUCT_CATEGORY")[["AVG_DISCOUNT"]])
 
@@ -35,10 +35,10 @@ GROUP BY region
 ORDER BY nb_promos DESC;
 """)
 
-st.caption("Nombre de promotions par région — bar chart")
+st.caption("Number of promotions by region — bar chart")
 if not df_region.empty:
     st.bar_chart(df_region.set_index("REGION")[["NB_PROMOS"]])
 
-with st.expander("Voir tables"):
+with st.expander("View tables"):
     st.dataframe(df_cat, use_container_width=True)
     st.dataframe(df_region, use_container_width=True)

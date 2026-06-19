@@ -2,7 +2,7 @@ import streamlit as st
 from _utils import run_query
 
 st.title("💰 Marketing ROI")
-st.caption("Analyse campagnes (proxy)")
+st.caption("Campaign analysis (proxy)")
 
 df_roi = run_query("""
 SELECT
@@ -19,7 +19,7 @@ ORDER BY roi_proxy DESC
 LIMIT 50;
 """)
 
-st.caption("Top campagnes par ROI proxy — bar chart")
+st.caption("Top campaigns by proxy ROI — bar chart")
 if not df_roi.empty:
     st.bar_chart(df_roi.head(20).set_index("CAMPAIGN_NAME")[["ROI_PROXY"]])
 
@@ -48,10 +48,10 @@ LIMIT 50;
 df_campaign_sales["SALES_DURING_CAMPAIGN"] = df_campaign_sales["SALES_DURING_CAMPAIGN"].astype(float)
 
 
-st.caption("Top campagnes par ventes pendant campagne — bar chart")
+st.caption("Top campaign sales during promotion — bar chart")
 if not df_campaign_sales.empty:
     st.bar_chart(df_campaign_sales.head(20).set_index("CAMPAIGN_NAME")[["SALES_DURING_CAMPAIGN"]])
 
-with st.expander("Voir tables"):
+with st.expander("View tables"):
     st.dataframe(df_roi, use_container_width=True)
     st.dataframe(df_campaign_sales, use_container_width=True)

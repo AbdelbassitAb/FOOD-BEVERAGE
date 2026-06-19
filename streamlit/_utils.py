@@ -7,6 +7,7 @@ import snowflake.connector
 # Snowflake connection configuration
 # ------------------------------------------------------------
 
+
 def load_snowflake_config():
     if "snowflake" in st.secrets:
         return st.secrets["snowflake"]
@@ -45,6 +46,7 @@ def get_conn():
     )
     return conn
 
+
 # ------------------------------------------------------------
 # Helper SQL
 # ------------------------------------------------------------
@@ -58,6 +60,7 @@ def run_query(sql: str) -> pd.DataFrame:
     finally:
         cur.close()
 
+
 # ------------------------------------------------------------
 # Helpers formatting & casting (ceux qui te manquent)
 # ------------------------------------------------------------
@@ -67,11 +70,13 @@ def safe_float(x, default=0.0):
     except:
         return default
 
+
 def safe_int(x, default=0):
     try:
         return default if x is None else int(x)
     except:
         return default
+
 
 def fmt_money(x: float) -> str:
     try:

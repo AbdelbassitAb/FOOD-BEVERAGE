@@ -1,7 +1,7 @@
 -- ============================================================================
--- Phase 3.2 - ML Feature Table for Promo Optimizer
--- Purpose: Create feature table for promo ROI prediction
--- Created: 2026-01-31 | Fixed for actual schema
+-- Phase 3.2 - ML Feature TABLE for Promo Optimizer
+-- Purpose: CREATE feature TABLE for promo ROI prediction
+-- Created: 2026-01-31 | Fixed for actual SCHEMA
 -- ============================================================================
 
 USE DATABASE ANYCOMPANY_LAB;
@@ -24,7 +24,7 @@ WITH promo_sales AS (
         p.REGION,
         DATEDIFF(day, p.START_DATE, p.END_DATE) + 1 AS DURATION_DAYS,
         
-        -- Sales during promo (from financial transactions where type = 'Sale')
+        -- Sales during promo (FROM financial transactions WHERE type = 'Sale')
         COUNT(DISTINCT t.TRANSACTION_ID) AS TRANSACTIONS_COUNT,
         SUM(t.AMOUNT) AS TOTAL_SALES,
         AVG(t.AMOUNT) AS AVG_TRANSACTION_VALUE
@@ -53,7 +53,7 @@ baseline_sales AS (
     GROUP BY p.PROMOTION_ID
 ),
 campaign_overlap AS (
-    -- Check if promo overlaps with campaigns
+    -- Check if promo overlaps WITH campaigns
     SELECT 
         p.PROMOTION_ID,
         MAX(CASE WHEN c.CAMPAIGN_ID IS NOT NULL THEN 1 ELSE 0 END) AS HAS_CAMPAIGN_OVERLAP,
@@ -141,7 +141,7 @@ FROM promo_sales ps
 LEFT JOIN baseline_sales bs ON ps.PROMOTION_ID = bs.PROMOTION_ID
 LEFT JOIN campaign_overlap co ON ps.PROMOTION_ID = co.PROMOTION_ID
 LEFT JOIN seasonality s ON ps.PROMOTION_ID = s.PROMOTION_ID
-WHERE bs.BASELINE_DAILY_SALES IS NOT NULL;  -- Only keep promos with baseline data
+WHERE bs.BASELINE_DAILY_SALES IS NOT NULL;  -- Only keep promos WITH baseline data
 
 -- ============================================================================
 -- Verification

@@ -1,5 +1,5 @@
---2.3.2 Marketing & performance commerciale
---A) Lien campagnes ↔ ventes (par région + période)
+-- 2.3.2 Marketing & commercial performance
+-- A) Campaigns-to-sales link (BY region + period)
 
 WITH sales_daily AS (
   SELECT
@@ -33,8 +33,7 @@ SELECT *
 FROM campaign_sales
 ORDER BY sales_during_campaign DESC NULLS LAST;
 
-
---B) Campagnes les plus efficaces (ROI proxy)
+-- B) Most effective campaigns (proxy ROI)
 SELECT
   campaign_name,
   region,

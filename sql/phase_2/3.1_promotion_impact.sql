@@ -1,5 +1,5 @@
---2.3.1 Ventes & promotions
---A) Ventes avec / sans promotion (par région + période)
+-- 2.3.1 Sales & promotions
+-- A) Sales WITH/without promotion (BY region + period)
 
 WITH sales AS (
   SELECT transaction_id, transaction_date, region, amount
@@ -18,13 +18,13 @@ sales_flag AS (
   FROM sales s
 )
 SELECT
-  IFF(is_promo_period=1, 'With Promotion Period', 'Without Promotion Period') AS promo_flag,
+  IFF(is_promo_period=1, 'WITH Promotion Period', 'Without Promotion Period') AS promo_flag,
   SUM(amount) AS total_sales,
   COUNT(*) AS nb_sales
 FROM sales_flag
 GROUP BY promo_flag;
 
---B) Sensibilité des catégories aux promotions (proxy)
+-- B) Category sensitivity to promotions (proxy)
 
 WITH promo_stats AS (
   SELECT

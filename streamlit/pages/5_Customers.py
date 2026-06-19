@@ -2,7 +2,7 @@ import streamlit as st
 from _utils import run_query
 
 st.title("👥 Customers")
-st.caption("Segmentation descriptive & expérience client")
+st.caption("Descriptive segmentation & customer experience")
 
 df_region = run_query("""
 SELECT region, COUNT(*) AS nb_clients, AVG(annual_income) AS avg_income
@@ -37,28 +37,27 @@ df_service["AVG_SATISFACTION"] = df_service["AVG_SATISFACTION"].astype(float)
 left, right = st.columns(2)
 
 with left:
-    st.caption("Clients par région — bar chart")
+    st.caption("Customers by region — bar chart")
     if not df_region.empty:
         st.bar_chart(df_region.set_index("REGION")[["NB_CLIENTS"]])
 
-    st.caption("Clients par genre — bar chart")
+    st.caption("Customers by gender — bar chart")
     if not df_gender.empty:
         st.bar_chart(df_gender.set_index("GENDER")[["NB_CLIENTS"]])
 
 with right:
-    st.caption("Clients par statut marital — bar chart")
+    st.caption("Customers by marital status — bar chart")
     if not df_marital.empty:
         st.bar_chart(df_marital.set_index("MARITAL_STATUS")[["NB_CLIENTS"]])
 
-    st.caption("Satisfaction moyenne par type d'incident — bar chart")
+    st.caption("Average satisfaction by issue category — bar chart")
     if not df_service.empty:
         st.bar_chart(df_service.set_index("ISSUE_CATEGORY")[["AVG_SATISFACTION"]])
 
 st.divider()
 
 
-
-with st.expander("Voir tables"):
+with st.expander("View tables"):
     st.dataframe(df_region, use_container_width=True)
     st.dataframe(df_gender, use_container_width=True)
     st.dataframe(df_marital, use_container_width=True)

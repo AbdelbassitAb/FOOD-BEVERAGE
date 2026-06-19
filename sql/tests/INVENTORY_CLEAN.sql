@@ -1,5 +1,5 @@
 -- Validation: SILVER.INVENTORY_CLEAN
--- This query returns rows with invalid inventory values.
+-- This query returns rows WITH invalid inventory VALUES.
 SELECT *
 FROM SILVER.INVENTORY_CLEAN
 WHERE current_stock < 0

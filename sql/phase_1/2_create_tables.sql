@@ -1,7 +1,6 @@
---Étape 2 – Création des tables BRONZE (brutes)
+-- Step 2 – CREATE raw BRONZE tables
 
-
---2.1 customer_demographics.csv
+-- 2.1 customer_demographics.csv
 CREATE OR REPLACE TABLE BRONZE.CUSTOMER_DEMOGRAPHICS (
   customer_id NUMBER,
   name VARCHAR,
@@ -14,7 +13,7 @@ CREATE OR REPLACE TABLE BRONZE.CUSTOMER_DEMOGRAPHICS (
   annual_income NUMBER(18,2)
 );
 
---2.2 customer_service_interactions.csv
+-- 2.2 customer_service_interactions.csv
 CREATE OR REPLACE TABLE BRONZE.CUSTOMER_SERVICE_INTERACTIONS (
   interaction_id VARCHAR,
   interaction_date DATE,
@@ -27,7 +26,7 @@ CREATE OR REPLACE TABLE BRONZE.CUSTOMER_SERVICE_INTERACTIONS (
   customer_satisfaction NUMBER(5,0)
 );
 
---2.3 financial_transactions.csv
+-- 2.3 financial_transactions.csv
 CREATE OR REPLACE TABLE BRONZE.FINANCIAL_TRANSACTIONS (
   transaction_id VARCHAR,
   transaction_date DATE,
@@ -38,7 +37,7 @@ CREATE OR REPLACE TABLE BRONZE.FINANCIAL_TRANSACTIONS (
   region VARCHAR,
   account_code VARCHAR
 );
---2.4 promotions-data.csv
+-- 2.4 promotions-data.csv
 CREATE OR REPLACE TABLE BRONZE.PROMOTIONS_DATA (
   promotion_id VARCHAR,
   product_category VARCHAR,
@@ -49,7 +48,7 @@ CREATE OR REPLACE TABLE BRONZE.PROMOTIONS_DATA (
   region VARCHAR
 );
 
---2.5 marketing_campaigns.csv
+-- 2.5 marketing_campaigns.csv
 CREATE OR REPLACE TABLE BRONZE.MARKETING_CAMPAIGNS (
   campaign_id VARCHAR,
   campaign_name VARCHAR,
@@ -64,7 +63,7 @@ CREATE OR REPLACE TABLE BRONZE.MARKETING_CAMPAIGNS (
   conversion_rate FLOAT
 );
 
---2.6 product_reviews.csv
+-- 2.6 product_reviews.csv
 
 CREATE OR REPLACE TABLE BRONZE.PRODUCT_REVIEWS (
   review_id NUMBER,
@@ -78,18 +77,17 @@ CREATE OR REPLACE TABLE BRONZE.PRODUCT_REVIEWS (
   product_category VARCHAR
 );
 
---2.7 inventory.json (semi-structuré)
+-- 2.7 inventory.json (semi-structured)
 CREATE OR REPLACE TABLE BRONZE.INVENTORY_RAW (
   raw VARIANT
 );
 
-
---2.8 store_locations.json
+-- 2.8 store_locations.json
 CREATE OR REPLACE TABLE BRONZE.STORE_LOCATIONS_RAW (
   raw VARIANT
 );
 
---2.9 logistics_and_shipping.csv
+-- 2.9 logistics_and_shipping.csv
 CREATE OR REPLACE TABLE BRONZE.LOGISTICS_AND_SHIPPING (
   shipment_id VARCHAR,
   order_id VARCHAR,
@@ -103,7 +101,7 @@ CREATE OR REPLACE TABLE BRONZE.LOGISTICS_AND_SHIPPING (
   carrier VARCHAR
 );
 
---2.10 supplier_information.csv
+-- 2.10 supplier_information.csv
 CREATE OR REPLACE TABLE BRONZE.SUPPLIER_INFORMATION (
   supplier_id VARCHAR,
   supplier_name VARCHAR,
@@ -116,7 +114,7 @@ CREATE OR REPLACE TABLE BRONZE.SUPPLIER_INFORMATION (
   quality_rating VARCHAR
 );
 
---2.11 employee_records.csv
+-- 2.11 employee_records.csv
 CREATE OR REPLACE TABLE BRONZE.EMPLOYEE_RECORDS (
   employee_id VARCHAR,
   name VARCHAR,
@@ -129,6 +127,5 @@ CREATE OR REPLACE TABLE BRONZE.EMPLOYEE_RECORDS (
   country VARCHAR,
   email VARCHAR
 );
-
 
 LIST @STG_FOOD_BEVERAGE;

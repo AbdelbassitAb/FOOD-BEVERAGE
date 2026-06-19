@@ -1,6 +1,6 @@
---2.3.4 Opérations & logistique
+-- 2.3.4 Operations & logistics
 
---A) Ruptures de stock (alertes)
+-- A) Stock shortages (alerts)
 
 SELECT
   product_category,
@@ -13,7 +13,7 @@ WHERE current_stock IS NOT NULL
 GROUP BY product_category, region
 ORDER BY nb_stock_alerts DESC;
 
---B) Impact des délais de livraison (et lien avec statuts)
+-- B) Delivery delay impact (AND link WITH status)
 
 SELECT
   status,

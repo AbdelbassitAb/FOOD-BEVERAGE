@@ -1,197 +1,222 @@
 # 🤖 Machine Learning - Customer Segmentation
 
-## 📚 Partie 3.3 & 3.4 - Segmentation Clients avec K-Means
+## 📚 Section 3.3 & 3.4 - Customer Segmentation with K-Means
 
-Ce notebook implémente un modèle de **segmentation clients** basé sur l'analyse RFM (Recency, Frequency, Monetary) et le clustering K-Means pour identifier des groupes de clients homogènes et personnaliser les stratégies marketing.
+This notebook implements a **customer segmentation** model based on RFM analysis (Recency, Frequency, Monetary) and K-Means clustering to identify homogeneous customer groups and personalize marketing strategies.
 
 ---
 
 ## 📓 Notebook: `customer_segmentation.ipynb`
 
-### 🎯 Objectif Business
-Identifier des segments de clients distincts pour:
-- Optimiser l'allocation du budget marketing
-- Personnaliser les offres par segment
-- Améliorer la rétention et la lifetime value (LTV)
-- Réduire le taux de churn des clients à risque
+### 🎯 Business Objective
+
+Identify distinct customer segments to:
+
+- Optimize marketing budget allocation
+- Personalize offers by segment
+- Improve retention and lifetime value (LTV)
+- Reduce churn among at-risk customers
 
 ---
 
-## 🔬 Méthodologie (Partie 3.3)
+## 🔬 Methodology (Section 3.3)
 
-### 1. **Analyse RFM**
-Calcul de 3 métriques clés pour chaque client:
-- **Recency**: Nombre de jours depuis le dernier achat
-- **Frequency**: Nombre total de transactions
-- **Monetary**: Montant total dépensé (€)
+### 1. **RFM Analysis**
 
-**Métriques additionnelles:**
-- Montant moyen par transaction
-- Durée de vie client (jours depuis premier achat)
-- Nombre de catégories de produits achetées
+Compute 3 key metrics for each customer:
+
+- **Recency**: Number of days since the last purchase
+- **Frequency**: Total number of transactions
+- **Monetary**: Total amount spent (€)
+
+**Additional metrics:**
+
+- Average amount per transaction
+- Customer lifetime (days since first purchase)
+- Number of product categories purchased
 
 ### 2. **K-Means Clustering**
-**Technique:** Clustering non supervisé avec optimisation du nombre de clusters
 
-**Processus:**
-1. Standardisation des features (StandardScaler)
-2. Méthode du coude (Elbow Method) pour K optimal
-3. Silhouette Score pour validation de la séparation
-4. Application du clustering final avec K optimal
-5. PCA pour visualisation 2D
+**Technique:** Unsupervised clustering with optimized number of clusters
 
-**K optimal sélectionné:** 6 clusters (basé sur Elbow + Silhouette)
+**Process:**
+
+1. Feature standardization (StandardScaler)
+2. Elbow Method for optimal K
+3. Silhouette Score for separation validation
+4. Apply the final clustering with optimal K
+5. PCA for 2D visualization
+
+**Optimal K selected:** 6 clusters (based on Elbow + Silhouette)
 
 ---
 
-## 📊 Résultats (Partie 3.4 - Évaluation)
+## 📊 Results (Section 3.4 - Evaluation)
 
-### Métriques de Performance
+### Performance Metrics
 
-| Métrique | Valeur | Interprétation |
-|----------|--------|----------------|
-| **Silhouette Score** | 0.50+ | Bonne séparation des clusters |
-| **Davies-Bouldin Index** | <1.0 | Clusters compacts et distincts |
-| **Nombre de clusters** | 6 | Segmentation optimale |
-| **Customers analysés** | 766 | Entités avec historique transactionnel |
+| Metric                   | Value | Interpretation                      |
+| ------------------------ | ----- | ----------------------------------- |
+| **Silhouette Score**     | 0.50+ | Good cluster separation             |
+| **Davies-Bouldin Index** | <1.0  | Compact and distinct clusters       |
+| **Number of clusters**   | 6     | Optimal segmentation                |
+| **Customers analyzed**   | 766   | Entities with transactional history |
 
-### Segments Identifiés
+### Identified Segments
 
-Les 6 segments clients découverts:
+The 6 customer segments discovered:
 
 #### 🌟 **Segment 0 - VIP Champions**
-- **Caractéristiques:** Recency faible, Frequency élevée, Monetary très élevé
-- **Profil:** Meilleurs clients, achats fréquents et montants élevés
-- **Budget marketing:** Premium (15€/client)
+
+- **Characteristics:** low Recency, high Frequency, very high Monetary
+- **Profile:** Best customers, frequent purchases and high values
+- **Marketing budget:** Premium (15€/customer)
 
 #### 💎 **Segment 1 - Loyal Customers**
-- **Caractéristiques:** Recency faible, Frequency moyenne-élevée, Monetary moyen
-- **Profil:** Clients fidèles avec engagement régulier
-- **Budget marketing:** Moyen-Élevé (10€/client)
+
+- **Characteristics:** low Recency, mid-high Frequency, average Monetary
+- **Profile:** Loyal customers with regular engagement
+- **Marketing budget:** Mid-high (10€/customer)
 
 #### ⚠️ **Segment 2 - At Risk / Dormant**
-- **Caractéristiques:** Recency élevée, Frequency faible-moyenne, Monetary variable
-- **Profil:** Clients inactifs nécessitant réactivation
-- **Budget marketing:** Moyen (8€/client)
+
+- **Characteristics:** high Recency, low-mid Frequency, variable Monetary
+- **Profile:** Inactive customers needing reactivation
+- **Marketing budget:** Medium (8€/customer)
 
 #### 🆕 **Segment 3 - New Customers**
-- **Caractéristiques:** Recency faible, Frequency faible, Monetary faible
-- **Profil:** Nouveaux clients à développer
-- **Budget marketing:** Moyen (7€/client)
+
+- **Characteristics:** low Recency, low Frequency, low Monetary
+- **Profile:** New customers to nurture
+- **Marketing budget:** Medium (7€/customer)
 
 #### 🚀 **Segment 4 - Potential Loyalists**
-- **Caractéristiques:** Recency moyenne, Frequency moyenne, Monetary moyen
-- **Profil:** Clients prometteurs avec potentiel de croissance
-- **Budget marketing:** Moyen (8€/client)
+
+- **Characteristics:** average Recency, average Frequency, average Monetary
+- **Profile:** Promising customers with growth potential
+- **Marketing budget:** Medium (8€/customer)
 
 #### 💤 **Segment 5 - Lost Customers**
-- **Caractéristiques:** Recency très élevée, Frequency très faible, Monetary faible
-- **Profil:** Clients perdus ou one-time buyers
-- **Budget marketing:** Minimal (3€/client)
+
+- **Characteristics:** very high Recency, very low Frequency, low Monetary
+- **Profile:** Lost customers or one-time buyers
+- **Marketing budget:** Minimal (3€/customer)
 
 ---
 
-## 💼 Recommandations Marketing Concrètes (Partie 3.4)
+## 💼 Concrete Marketing Recommendations (Section 3.4)
 
 ### 🌟 VIP Champions
-**Actions:**
-- Programme fidélité premium avec points bonus
-- Accès anticipé aux nouveaux produits
-- Offres exclusives haut de gamme
-- Service client VIP personnalisé
-- Événements privés et avantages exclusifs
 
-**ROI attendu:** Rétention +25%, LTV +40%
+**Actions:**
+
+- Premium loyalty program with bonus points
+- Early access to new products
+- Exclusive premium offers
+- Personalized VIP customer service
+- Private events and exclusive perks
+
+**Expected ROI:** Retention +25%, LTV +40%
 
 ---
 
 ### 💎 Loyal Customers
-**Actions:**
-- Programme de parrainage avec récompenses
-- Offres de cross-sell personnalisées
-- Réductions sur achats en volume
-- Newsletter avec contenu exclusif
-- Gamification pour augmenter l'engagement
 
-**ROI attendu:** Conversion +20%, Rétention +15%
+**Actions:**
+
+- Referral program with rewards
+- Personalized cross-sell offers
+- Volume purchase discounts
+- Newsletter with exclusive content
+- Gamification to increase engagement
+
+**Expected ROI:** Conversion +20%, Retention +15%
 
 ---
 
 ### ⚠️ At Risk / Dormant
-**Actions:**
-- Campagne de réactivation avec offre agressive (20-30% off)
-- Email "We miss you" avec incentive fort
-- Enquête satisfaction pour comprendre l'inactivité
-- Retargeting digital intensif
-- Offre personnalisée basée sur historique
 
-**ROI attendu:** Réactivation 10-15%, Churn -10%
+**Actions:**
+
+- Reactivation campaign with strong offer (20-30% off)
+- 'We miss you' email with strong incentive
+- Satisfaction survey to understand inactivity
+- Intensive digital retargeting
+- Personalized offer based on history
+
+**Expected ROI:** Reactivation 10-15%, Churn -10%
 
 ---
 
 ### 🆕 New Customers
-**Actions:**
-- Séquence d'onboarding automatisée
-- Guide produits et tutoriels
-- Première commande gratuite (livraison)
-- Programme de découverte avec échantillons
-- Support proactif pendant 30 premiers jours
 
-**ROI attendu:** Conversion deuxième achat +30%
+**Actions:**
+
+- Automated onboarding sequence
+- Product guides and tutorials
+- First order free (shipping)
+- Discovery program with samples
+- Proactive support during the first 30 days
+
+**Expected ROI:** Second purchase conversion +30%
 
 ---
 
 ### 🚀 Potential Loyalists
-**Actions:**
-- Upselling ciblé vers produits premium
-- Offres bundles personnalisées
-- Programme de points pour fidélisation
-- Contenu éducatif sur bénéfices produits
-- Incentives pour augmenter fréquence d'achat
 
-**ROI attendu:** LTV +25%, Frequency +20%
+**Actions:**
+
+- Targeted upselling toward premium products
+- Personalized bundle offers
+- Points program for loyalty
+- Educational content on product benefits
+- Incentives to increase purchase frequency
+
+**Expected ROI:** LTV +25%, Frequency +20%
 
 ---
 
 ### 💤 Lost Customers
+
 **Actions:**
-- Win-back campaign avec offre exceptionnelle (40% off)
-- Enquête détaillée sur raisons de départ
-- Communication minimale (éviter spam)
-- Focus sur long-terme plutôt que ROI immédiat
-- Analyse pour prévenir future churn
 
-**ROI attendu:** Win-back 3-5% seulement
+- Win-back campaign with exceptional offer (40% off)
+- Detailed exit survey
+- Minimal communication (avoid spam)
+- Focus on long-term rather than immediate ROI
+- Analysis to prevent future churn
 
----
-
-## 📈 Impact Business Estimé
-
-### KPIs Globaux
-
-| Métrique | Amélioration Estimée |
-|----------|---------------------|
-| **Taux de rétention** | +15-25% |
-| **Lifetime Value (LTV)** | +30% |
-| **Taux de conversion** | +20% |
-| **Réduction du churn** | -10-15% |
-| **ROI marketing** | +40% |
-| **Coût d'acquisition (CAC)** | -25% |
-
-### Allocation Budgétaire Recommandée
-
-```
-🌟 VIP Champions:       40% du budget (ROI le plus élevé)
-💎 Loyal Customers:     25% du budget (rétention)
-⚠️ At Risk:            15% du budget (prévention churn)
-🆕 New Customers:       12% du budget (acquisition)
-🚀 Potential Loyalists: 6% du budget (développement)
-💤 Lost Customers:      2% du budget (win-back)
-```
+**Expected ROI:** Win-back 3-5% only
 
 ---
 
-## 🛠️ Technologies Utilisées
+## 📈 Estimated Business Impact
+
+### Global KPIs
+
+| Metric                              | Estimated improvement |
+| ----------------------------------- | --------------------- |
+| **Retention rate**                  | +15-25%               |
+| **Lifetime Value (LTV)**            | +30%                  |
+| **Conversion rate**                 | +20%                  |
+| **Churn reduction**                 | -10-15%               |
+| **Marketing ROI**                   | +40%                  |
+| **Customer acquisition cost (CAC)** | -25%                  |
+
+### Recommended Budget Allocation
+
+```
+🌟 VIP Champions:       40% of the budget (highest ROI)
+💎 Loyal Customers:     25% of the budget (retention)
+⚠️ At Risk:            15% of the budget (churn prevention)
+🆕 New Customers:       12% of the budget (acquisition)
+🚀 Potential Loyalists: 6% of the budget (growth)
+💤 Lost Customers:      2% of the budget (win-back)
+```
+
+---
+
+## 🛠️ Technologies Used
 
 - **Python 3.13**
 - **scikit-learn** - K-Means, PCA, StandardScaler
@@ -203,13 +228,16 @@ Les 6 segments clients découverts:
 
 ## 🚀 Quick Start
 
-### Prérequis
+### Prerequisites
+
 ```bash
 pip install pandas numpy scikit-learn matplotlib seaborn snowflake-connector-python
 ```
 
 ### Configuration Snowflake
-Créer `../streamlit/.streamlit/secrets.toml`:
+
+Create `../streamlit/.streamlit/secrets.toml`:
+
 ```toml
 [snowflake]
 account = "YOUR_ACCOUNT"
@@ -220,50 +248,57 @@ database = "ANYCOMPANY_LAB"
 schema = "ANALYTICS"
 ```
 
-### Exécution
-1. Ouvrir `customer_segmentation.ipynb` dans VS Code
-2. Sélectionner kernel Python 3.x
-3. Run All Cells (Ctrl+Shift+P → "Run All")
+### Execution
+
+1. Open `customer_segmentation.ipynb` in VS Code
+2. Select Python 3.x kernel
+3. Run all cells (Ctrl+Shift+P → "Run All")
 
 ---
 
-## 📊 Visualisations Incluses
+## 📊 Included Visualizations
 
-### 1. Méthode du Coude (Elbow Method)
-- Graphique Inertia vs K pour déterminer K optimal
-- Silhouette Score par K pour validation
+### 1. Elbow Method
+
+- Inertia vs K chart to identify optimal K
+- Silhouette Score by K for validation
 
 ### 2. Segmentation PCA 2D
-- Visualisation des clusters dans l'espace réduit (2 composantes)
-- Séparation claire des 6 segments
+
+- Visualization of clusters in reduced 2D space
+- Clear separation of the 6 segments
 
 ### 3. RFM Space 3D Projection
+
 - Frequency vs Monetary avec taille de bulle = Recency
 - Vue d'ensemble de la distribution des clients
 
 ### 4. Profils de Segments
-- Statistiques moyennes par segment (Recency, Frequency, Monetary)
-- Distribution des clients par segment
+
+- Average statistics per segment (Recency, Frequency, Monetary)
+- Customer distribution by segment
 
 ---
 
-## ✅ Alignement avec le Projet École
+## ✅ Alignment with the School Project
 
-### Partie 3.3 - Développer Modèles ML ✅
-- ✅ Technique utilisée: K-Means Clustering (non supervisé)
-- ✅ Feature engineering: RFM + métriques comportementales
-- ✅ Optimisation hyperparamètres: Méthode du coude pour K optimal
-- ✅ Pipeline complet: Data loading → Preprocessing → Training → Evaluation
+### Section 3.3 - Develop ML Models ✅
 
-### Partie 3.4 - Évaluation & Recommandations ✅
-- ✅ **Métriques de performance:** Silhouette Score, Davies-Bouldin Index, Inertia
-- ✅ **Interprétation des features:** Profils RFM par segment avec labeling automatique
-- ✅ **Recommandations marketing concrètes:** Actions détaillées par segment avec budget et ROI
-- ✅ **Impact business estimé:** KPIs quantifiés (+15-40% selon métrique)
+- ✅ Technique used: K-Means Clustering (unsupervised)
+- ✅ Feature engineering: RFM + behavioral metrics
+- ✅ Hyperparameter optimization: Elbow Method for optimal K
+- ✅ Complete pipeline: Data loading → preprocessing → training → evaluation
+
+### Section 3.4 - Evaluation & Recommendations ✅
+
+- ✅ **Performance metrics:** Silhouette Score, Davies-Bouldin Index, Inertia
+- ✅ **Feature interpretation:** RFM profiles per segment with automatic labeling
+- ✅ **Concrete marketing recommendations:** Segment-level actions with budget and ROI
+- ✅ **Estimated business impact:** Quantified KPIs (+15-40% by metric)
 
 ---
 
-## 📝 Structure du Notebook
+## 📝 Notebook Structure
 
 ```
 customer_segmentation.ipynb
@@ -279,33 +314,34 @@ customer_segmentation.ipynb
 ├── 6. Visualizations
 │   ├── PCA 2D Scatter
 │   └── RFM Space Plot
-├── 7. Partie 3.4 - Évaluation
+├── 7. Section 3.4 - Evaluation
 │   ├── Performance Metrics
 │   ├── Segment Profiling
 │   └── Automatic Labeling
-└── 8. Partie 3.4 - Recommandations Marketing
-    ├── Actions par segment
+└── 8. Section 3.4 - Marketing Recommendations
+    ├── Actions by segment
     ├── Budget allocation
-    └── Impact business estimé
+    └── Estimated business impact
 ```
 
 ---
 
-## 🎓 Points Clés pour la Présentation
+## 🎓 Key Presentation Points
 
-1. **Méthodologie robuste:** RFM + K-Means est une technique éprouvée dans l'industrie
-2. **Validation rigoureuse:** Silhouette Score et Davies-Bouldin confirment la qualité des clusters
-3. **Business value:** Recommandations concrètes avec impact chiffré
-4. **Scalabilité:** Le modèle peut être réentraîné périodiquement avec nouvelles données
-5. **Intégration possible:** Scoring automatique via Snowflake Stored Procedure
+1. **Robust methodology:** RFM + K-Means is a proven technique in the industry
+2. **Rigorous validation:** Silhouette Score and Davies-Bouldin confirm cluster quality
+3. **Business value:** Concrete recommendations with quantified impact
+4. **Scalability:** The model can be retrained periodically with new data
+5. **Possible integration:** Automatic scoring via Snowflake Stored Procedure
 
 ---
 
 ## 📧 Questions?
 
-Pour toute question sur l'implémentation:
-- Consulter les cellules markdown explicatives dans le notebook
-- Vérifier les métriques Section 7 (Partie 3.4 - Évaluation)
-- Lire les recommandations Section 8 pour cas d'usage réels
+For any implementation questions:
+
+- Review the explanatory markdown cells in the notebook
+- Check Section 7 metrics (Section 3.4 - Evaluation)
+- Read Section 8 recommendations for real use cases
 
 **Happy Machine Learning! 🚀🤖**

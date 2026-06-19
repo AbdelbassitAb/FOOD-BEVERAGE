@@ -1,201 +1,233 @@
-# Business Insights – Phase 2 (Analyse approfondie)
+# Business Insights – Phase 2 (Deep Analysis)
 
-## 1. Évolution des ventes dans le temps
+## 1. Sales trend over time
 
-### Constats clés
-- Les ventes mensuelles varient fortement entre **~5 000 et ~65 000** unités monétaires.
-- Absence de tendance de croissance claire sur la période **2010–2023**.
-- Forte volatilité mensuelle avec des pics isolés (ex. >60 000) et des creux marqués (<10 000).
+### Key findings
 
-### Interprétation métier
-- L’activité commerciale dépend fortement d’actions ponctuelles (campagnes, événements, effets exogènes) plutôt que d’une dynamique structurelle.
-- L’entreprise ne bénéficie pas d’un socle de ventes récurrentes suffisamment stable.
+- Monthly sales vary widely between **~5,000 and ~65,000** monetary units.
+- No clear growth trend is visible over the period **2010–2023**.
+- Strong monthly volatility with isolated peaks (e.g. >60,000) and deep troughs (<10,000).
 
-### Impact potentiel sur la stratégie marketing
-- Mettre en place des **campagnes de fidélisation** pour lisser les ventes.
-- Développer des abonnements, bundles ou offres récurrentes.
-- Utiliser la prévision des ventes pour mieux planifier campagnes et stocks.
+### Business interpretation
 
----
+- Commercial activity depends heavily on one-off actions (campaigns, events, exogenous effects) rather than a structural growth trend.
+- The company lacks a sufficiently stable recurring sales baseline.
 
-## 2. Analyse des types de transactions
+### Strategic impact
 
-### Constats clés
-- Les ventes (“Sale”) représentent environ **984 transactions** pour un total de **~4,93 M**.
-- Les autres types (Investment, Tax Payment, Refund, Expense) ont des volumes et montants comparables (≈5 M chacun).
-
-### Interprétation métier
-- Les ventes ne sont pas la seule source majeure de flux financiers.
-- Le pilotage marketing doit se concentrer sur la **qualité et la rentabilité** des ventes plutôt que sur leur volume brut.
-
-### Impact stratégique
-- Prioriser les actions marketing sur les transactions génératrices de valeur nette.
-- Intégrer une vision marge / profit dans les KPIs marketing.
+- Implement **loyalty campaigns** to smooth sales.
+- Develop subscriptions, bundles, or recurring offers.
+- Use sales forecasting to better plan campaigns and inventory.
 
 ---
 
-## 3. Segmentation clients (démographie)
+## 2. Transaction type analysis
 
-### Constats clés
-**Par région**
-- Amérique du Sud : **741 clients**, revenu moyen ≈ **108 756**
-- Asie : **726 clients**, revenu moyen ≈ **111 695**
-- Europe : **703 clients**, revenu moyen ≈ **111 005**
+### Key findings
 
-**Par genre**
-- Female : **1 719**
-- Male : **1 644**
-- Other : **1 637**
+- Sales (“Sale”) represent approximately **984 transactions** for a total of **~4.93M**.
+- Other types (Investment, Tax Payment, Refund, Expense) have comparable volumes and amounts (≈5M each).
 
-**Par statut marital**
-- Married : **1 338**
-- Single : **1 251**
-- Widowed : **1 217**
-- Divorced : **1 194**
+### Business interpretation
 
-### Interprétation métier
-- Répartition très équilibrée : aucun segment naturellement dominant.
-- Les différences de revenus sont faibles entre régions (≈108k–112k).
+- Sales are not the only major source of financial flow.
+- Marketing steering should focus on the **quality and profitability** of sales rather than on raw volume.
 
-### Impact stratégique
-- Nécessité de **campagnes ciblées fines** (micro‑segmentation).
-- Tester des messages différenciés par région ou statut marital.
-- Peu d’intérêt à une stratégie “one size fits all”.
+### Strategic impact
+
+- Prioritize marketing actions on transactions that generate net value.
+- Integrate margin/profit into marketing KPIs.
 
 ---
 
-## 4. Promotions et ventes
+## 3. Customer segmentation (demographics)
 
-### Constats clés
-- Ventes hors période promotionnelle :
-  - **~4 743 670** de chiffre d’affaires
-  - **947 ventes**
-- Ventes en période promotionnelle :
-  - **~185 028**
-  - **37 ventes**
-→ Moins de **4 %** des ventes ont lieu pendant une promotion.
+### Key findings
 
-### Interprétation métier
-- Les promotions sont **peu nombreuses** et/ou **mal synchronisées** avec les ventes.
-- Impact global très limité sur le chiffre d’affaires.
+**By region**
 
-### Impact stratégique
-- Repenser le calendrier promotionnel.
-- Cibler des périodes de forte demande.
-- Tester des promotions plus courtes mais plus fréquentes.
-- Mesurer l’impact incrémental réel (A/B testing).
+- South America: **741 customers**, average income ≈ **108,756**
+- Asia: **726 customers**, average income ≈ **111,695**
+- Europe: **703 customers**, average income ≈ **111,005**
+
+**By gender**
+
+- Female: **1,719**
+- Male: **1,644**
+- Other: **1,637**
+
+**By marital status**
+
+- Married: **1,338**
+- Single: **1,251**
+- Widowed: **1,217**
+- Divorced: **1,194**
+
+### Business interpretation
+
+- The distribution is very balanced: no naturally dominant segment.
+- Income differences between regions are small (≈108k–112k).
+
+### Strategic impact
+
+- Need for **fine-grained targeting** (micro-segmentation).
+- Test differentiated messaging by region or marital status.
+- Little benefit from a “one size fits all” strategy.
 
 ---
 
-## 5. Sensibilité des catégories aux promotions
+## 4. Promotions and sales
 
-### Constats clés
+### Key findings
+
+- Sales outside promotion periods:
+  - **~4,743,670** in revenue
+  - **947 sales**
+- Sales during promotion periods:
+  - **~185,028**
+  - **37 sales**
+    → Less than **4%** of sales occur during a promotion.
+
+### Business interpretation
+
+- Promotions are **few** and/or **poorly timed** with sales.
+- The overall impact on revenue is very limited.
+
+### Strategic impact
+
+- Rethink the promotion calendar.
+- Target periods of strong demand.
+- Test shorter but more frequent promotions.
+- Measure the real incremental impact (A/B testing).
+
+---
+
+## 5. Category sensitivity to promotions
+
+### Key findings
+
 - **Organic Meal Solutions – North America**
   - 4 promotions
-  - Discount moyen ≈ **12,8 %**
-  - Ventes ≈ **59 065**
+  - Average discount ≈ **12.8%**
+  - Sales ≈ **59,065**
 - **Organic Beverages – Asia**
   - 4 promotions
-  - Discount moyen ≈ **16 %**
-  - Ventes ≈ **28 490**
-- Certaines catégories affichent **0 vente malgré des promotions**.
+  - Average discount ≈ **16%**
+  - Sales ≈ **28,490**
+- Some categories show **0 sales despite promotions**.
 
-### Interprétation métier
-- Forte hétérogénéité selon catégories et régions.
-- Certaines promotions ne génèrent aucun effet mesurable.
+### Business interpretation
 
-### Impact stratégique
-- Concentrer les budgets promotionnels sur les catégories réactives.
-- Abandonner ou revoir les promotions non performantes.
-- Adapter le niveau de remise selon la région.
+- There is strong heterogeneity across categories and regions.
+- Some promotions generate no measurable effect.
+
+### Strategic impact
+
+- Focus promotional budgets on responsive categories.
+- Cancel or redesign non-performing promotions.
+- Adjust discount levels by region.
 
 ---
 
-## 6. Performance des campagnes marketing (ROI proxy)
+## 6. Marketing campaign performance (proxy ROI)
 
-### Constats clés
-- Meilleures campagnes :
-  - ROI proxy jusqu’à **~12,37**
-  - Budget ≈ **7 000**
-  - Conversions estimées > **80 000**
-- Campagnes moins performantes :
+### Key findings
+
+- Top campaigns:
+  - proxy ROI up to **~12.37**
+  - budget ≈ **7,000**
+  - estimated conversions > **80,000**
+- Less effective campaigns:
   - ROI ≈ **6–7**
-  - Budgets parfois plus élevés sans gain proportionnel.
+  - budgets sometimes higher without proportional gain.
 
-### Interprétation métier
-- Le budget seul n’explique pas la performance.
-- Le ciblage, la catégorie produit et la région sont déterminants.
+### Business interpretation
 
-### Impact stratégique
-- Réallouer le budget vers les campagnes à ROI élevé.
-- Créer un score de performance campagne standardisé.
-- Industrialiser les “recettes gagnantes”.
+- Budget alone does not explain performance.
+- Targeting, product category, and region are key.
 
----
+### Strategic impact
 
-## 7. Expérience client – Avis produits
-
-### Constats clés
-- Notes moyennes très dispersées.
-- Certaines catégories avec peu d’avis mais des notes extrêmes.
-- Volume d’avis souvent faible (1 à 6 avis par catégorie).
-
-### Interprétation métier
-- Les avis actuels sont peu représentatifs.
-- Risque de biais dans l’analyse de satisfaction.
-
-### Impact stratégique
-- Encourager la collecte d’avis clients.
-- Pondérer les analyses par le volume d’avis.
-- Intégrer le feedback client dans le marketing produit.
+- Reallocate budget to high-ROI campaigns.
+- Create a standardized campaign performance score.
+- Industrialize the “winning recipes.”
 
 ---
 
-## 8. Service client
+## 7. Customer experience – product reviews
 
-### Constats clés
-- Satisfaction moyenne par type :
-  - Technical Support : **2,95**
-  - Order Status : **3,00**
-  - Returns : **3,05**
-- Volumes élevés (~1 000 interactions par catégorie).
+### Key findings
 
-### Interprétation métier
-- Niveau de satisfaction globalement moyen.
-- Le support technique est le point le plus critique.
+- Average ratings are very dispersed.
+- Some categories have few reviews but extreme ratings.
+- Review volumes are often low (1 to 6 reviews per category).
 
-### Impact stratégique
-- Prioriser l’amélioration du support technique.
-- Automatiser les demandes simples.
-- Utiliser la satisfaction comme KPI marketing indirect.
+### Business interpretation
 
----
+- Current reviews are not representative.
+- There is a risk of bias in satisfaction analysis.
 
-## 9. Opérations & logistique
+### Strategic impact
 
-### Ruptures de stock
-- Exemples :
-  - Beverages – Africa : **7 alertes**
-  - Baby Food – Oceania : **5 alertes**
-
-### Délais de livraison
-- Délai moyen ≈ **7,5 jours** quel que soit le statut.
-- Peu de différenciation entre “Delivered”, “Shipped”, “Returned”.
-
-### Interprétation métier
-- Problèmes de stock concentrés sur certaines catégories/régions.
-- Les délais ne semblent pas discriminants actuellement.
-
-### Impact stratégique
-- Améliorer la prévision des stocks pour catégories sensibles.
-- Coupler données stock + marketing pour éviter promotions en rupture.
-- Travailler la promesse de livraison comme levier marketing.
+- Encourage customer review collection.
+- Weight analyses by review volume.
+- Integrate customer feedback into product marketing.
 
 ---
 
-## Conclusion générale
+## 8. Customer service
 
-Les analyses montrent que :
-- Les promotions et campagnes sont **sous‑optimisées**.
-- Le potentiel se situe dans la **segmentation fine**, la **réallocation budgétaire** et la **qualité opérationnelle**.
-- La donnée permet de passer d’un marketing intuitif à un **marketing piloté par la performance**.
+### Key findings
+
+- Average satisfaction by type:
+  - Technical Support: **2.95**
+  - Order Status: **3.00**
+  - Returns: **3.05**
+- High volumes (~1,000 interactions per category).
+
+### Business interpretation
+
+- Overall satisfaction is average.
+- Technical support is the most critical area.
+
+### Strategic impact
+
+- Prioritize improvements in technical support.
+- Automate simple requests.
+- Use satisfaction as an indirect marketing KPI.
+
+---
+
+## 9. Operations & logistics
+
+### Stock outages
+
+- Examples:
+  - Beverages – Africa: **7 alerts**
+  - Baby Food – Oceania: **5 alerts**
+
+### Delivery lead time
+
+- Average lead time ≈ **7.5 days** regardless of status.
+- Little differentiation between “Delivered”, “Shipped”, “Returned”.
+
+### Business interpretation
+
+- Stock issues are concentrated in specific categories/regions.
+- Lead times do not appear to be discriminating today.
+
+### Strategic impact
+
+- Improve stock forecasting for sensitive categories.
+- Combine stock and marketing data to avoid promotions during stockouts.
+- Use delivery promise as a marketing lever.
+
+---
+
+## Overall conclusion
+
+The analyses show that:
+
+- promotions and campaigns are **under-optimized**.
+- the potential lies in **fine segmentation**, **budget reallocation**, and **operational quality**.
+- data enables a shift from intuitive marketing to **performance-driven marketing**.

@@ -108,9 +108,9 @@ def overview_page():
 
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Total Sales", fmt_money(total_sales))
-    c2.metric("Nb ventes (Sale)", f"{nb_sales:,}".replace(",", " "))
-    c3.metric("Nb régions", f"{nb_regions:,}".replace(",", " "))
-    c4.metric("Part ventes en période promo", f"{promo_rate*100:.1f}%")
+    c2.metric("Number of sales (Sale)", f"{nb_sales:,}".replace(",", " "))
+    c3.metric("Number of regions", f"{nb_regions:,}".replace(",", " "))
+    c4.metric("Share of sales during promo period", f"{promo_rate*100:.1f}%")
 
     st.divider()
 
@@ -135,24 +135,24 @@ def overview_page():
     left, right = st.columns(2)
 
     with left:
-        st.caption("Tendance des ventes (mensuel) — line chart")
+        st.caption("Sales trend (monthly) — line chart")
         if not df_month.empty:
             df_month["MONTH"] = pd.to_datetime(df_month["MONTH"])
             st.line_chart(df_month.set_index("MONTH")[["TOTAL_SALES"]])
         else:
-            st.info("Pas de données ventes.")
+            st.info("No sales data.")
 
     with right:
-        st.caption("Ventes par région — bar chart")
+        st.caption("Sales by region — bar chart")
         if not df_regions.empty:
             st.bar_chart(df_regions.set_index("REGION")[["TOTAL_SALES"]])
         else:
-            st.info("Pas de données régions.")
+            st.info("No regional data.")
 
-    with st.expander("Voir les données (overview)"):
-        st.write("Sales par mois:")
+    with st.expander("View data (overview)"):
+        st.write("Sales by month:")
         st.dataframe(df_month, use_container_width=True)
-        st.write("Sales par région:")
+        st.write("Sales by region:")
         st.dataframe(df_regions, use_container_width=True)
 
 
@@ -172,13 +172,13 @@ def sales_page():
     if not df_month.empty:
         df_month["MONTH"] = pd.to_datetime(df_month["MONTH"])
 
-        st.caption("Total Sales (mensuel) — line chart")
+        st.caption("Total Sales (monthly) — line chart")
         st.line_chart(df_month.set_index("MONTH")[["TOTAL_SALES"]])
 
-        st.caption("Nombre de ventes (mensuel) — line chart")
+        st.caption("Number of sales (monthly) — line chart")
         st.line_chart(df_month.set_index("MONTH")[["NB_SALES"]])
     else:
-        st.info("Pas de données ventes.")
+        st.info("No sales data.")
 
     st.divider()
 
@@ -190,13 +190,13 @@ def sales_page():
     ORDER BY total_amount DESC;
     """)
 
-    st.caption("Montant total par type de transaction — bar chart")
+    st.caption("Total amount by transaction type — bar chart")
     if not df_types.empty:
         st.bar_chart(df_types.set_index("TRANSACTION_TYPE")[["TOTAL_AMOUNT"]])
     else:
-        st.info("Pas de données transaction types.")
+        st.info("No transaction type data.")
 
-    with st.expander("Voir les tables (sales)"):
+    with st.expander("View tables (sales)"):
         st.dataframe(df_month, use_container_width=True)
         st.dataframe(df_types, use_container_width=True)
 
@@ -218,19 +218,19 @@ def promotions_page():
     c1, c2 = st.columns(2)
 
     with c1:
-        st.caption("Nombre de promotions par catégorie — bar chart")
-        if not df_cat.empty:
-            st.bar_chart(df_cat.set_index("PRODUCT_CATEGORY")[["NB_PROMOS"]])
-        else:
-            st.info("Pas de données promotions par catégorie.")
+st.caption("Number of promotions by category — bar chart")
+    if not df_cat.empty:
+        st.bar_chart(df_cat.set_index("PRODUCT_CATEGORY")[["NB_PROMOS"]])
+    else:
+        st.info("No promotion data by category.")
 
     with c2:
-        st.caption("Discount moyen par catégorie — bar chart")
+        st.caption("Average discount by category — bar chart")
         if not df_cat.empty:
             # avg_discount is between 0 and 1 in your cleaning rules
             st.bar_chart(df_cat.set_index("PRODUCT_CATEGORY")[["AVG_DISCOUNT"]])
         else:
-            st.info("Pas de données discount.")
+            st.info("No discount data.")
 
     st.divider()
 
@@ -241,17 +241,17 @@ def promotions_page():
     ORDER BY nb_promos DESC;
     """)
 
-    st.caption("Nombre de promotions par région — bar chart")
+    st.caption("Number of promotions by region — bar chart")
     if not df_region.empty:
         st.bar_chart(df_region.set_index("REGION")[["NB_PROMOS"]])
 
-    with st.expander("Voir les tables (promotions)"):
+    with st.expander("View tables (promotions)"):
         st.dataframe(df_cat, use_container_width=True)
         st.dataframe(df_region, use_container_width=True)
 
 
 def roi_page():
-    st.subheader("Marketing ROI — analyse campagnes (proxy)")
+    st.subheader("Marketing ROI — campaign analysis (proxy)")
 
     df_roi = run_query("""
     SELECT
@@ -268,11 +268,11 @@ def roi_page():
     LIMIT 50;
     """)
 
-    st.caption("Top campagnes par ROI proxy — bar chart")
+    st.caption("Top campaigns by proxy ROI — bar chart")
     if not df_roi.empty:
         st.bar_chart(df_roi.head(20).set_index("CAMPAIGN_NAME")[["ROI_PROXY"]])
     else:
-        st.info("Pas de données campagnes.")
+        st.info("No campaign data.")
 
     st.divider()
 
@@ -297,19 +297,19 @@ def roi_page():
     LIMIT 50;
     """)
 
-    st.caption("Top campagnes par ventes pendant campagne — bar chart")
+    st.caption("Top campaigns by sales during campaign — bar chart")
     if not df_campaign_sales.empty:
         st.bar_chart(df_campaign_sales.head(20).set_index("CAMPAIGN_NAME")[["SALES_DURING_CAMPAIGN"]])
     else:
-        st.info("Pas de données sales_during_campaign.")
+        st.info("No campaign sales data.")
 
-    with st.expander("Voir les tables (ROI)"):
+    with st.expander("View tables (ROI)"):
         st.dataframe(df_roi, use_container_width=True)
         st.dataframe(df_campaign_sales, use_container_width=True)
 
 
 def customers_page():
-    st.subheader("Customers — segmentation descriptive & expérience client")
+    st.subheader("Customers — descriptive segmentation & customer experience")
 
     df_region = run_query("""
     SELECT region, COUNT(*) AS nb_clients, AVG(annual_income) AS avg_income
@@ -341,18 +341,18 @@ def customers_page():
     left, right = st.columns(2)
 
     with left:
-        st.caption("Clients par région — bar chart")
+        st.caption("Customers by region — bar chart")
         if not df_region.empty:
             st.bar_chart(df_region.set_index("REGION")[["NB_CLIENTS"]])
-        st.caption("Clients par genre — bar chart")
+        st.caption("Customers by gender — bar chart")
         if not df_gender.empty:
             st.bar_chart(df_gender.set_index("GENDER")[["NB_CLIENTS"]])
 
     with right:
-        st.caption("Clients par statut marital — bar chart")
+        st.caption("Customers by marital status — bar chart")
         if not df_marital.empty:
             st.bar_chart(df_marital.set_index("MARITAL_STATUS")[["NB_CLIENTS"]])
-        st.caption("Satisfaction moyenne par type d'incident — bar chart")
+        st.caption("Average satisfaction by issue category — bar chart")
         if not df_service.empty:
             st.bar_chart(df_service.set_index("ISSUE_CATEGORY")[["AVG_SATISFACTION"]])
 
@@ -367,11 +367,11 @@ def customers_page():
     ORDER BY avg_rating DESC;
     """)
 
-    st.caption("Avis produits : note moyenne par catégorie — bar chart")
+    st.caption("Product reviews: average rating by category — bar chart")
     if not df_reviews.empty:
         st.bar_chart(df_reviews.set_index("PRODUCT_CATEGORY")[["AVG_RATING"]])
 
-    with st.expander("Voir les tables (customers)"):
+    with st.expander("View tables (customers)"):
         st.dataframe(df_region, use_container_width=True)
         st.dataframe(df_gender, use_container_width=True)
         st.dataframe(df_marital, use_container_width=True)
@@ -408,20 +408,20 @@ def ops_page():
     left, right = st.columns(2)
 
     with left:
-        st.caption("Alertes stock par catégorie — bar chart")
+        st.caption("Stock alerts by category — bar chart")
         if not df_stock_cat.empty:
             st.bar_chart(df_stock_cat.set_index("PRODUCT_CATEGORY")[["NB_STOCK_ALERTS"]])
         else:
-            st.info("Pas d'alertes stock détectées.")
+            st.info("No stock alerts detected.")
 
     with right:
-        st.caption("Délais moyens de livraison (jours) par statut — bar chart")
+        st.caption("Average delivery days by status — bar chart")
         if not df_delivery.empty:
             st.bar_chart(df_delivery.set_index("STATUS")[["AVG_DELIVERY_DAYS"]])
         else:
-            st.info("Pas de données délais livraison.")
+            st.info("No delivery data.")
 
-    with st.expander("Voir les tables (ops)"):
+    with st.expander("View tables (ops)"):
         st.dataframe(df_stock_cat, use_container_width=True)
         st.dataframe(df_delivery, use_container_width=True)
 

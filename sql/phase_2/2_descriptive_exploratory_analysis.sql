@@ -1,5 +1,5 @@
---2.2 – Analyses exploratoires descriptives (SQL)
---2.2.1 Évolution des ventes dans le temps
+-- 2.2 – Descriptive exploratory analysis (SQL)
+-- 2.2.1 Sales evolution over time
 
 SELECT
   DATE_TRUNC('month', transaction_date) AS month,
@@ -10,10 +10,9 @@ WHERE transaction_type = 'Sale'
 GROUP BY month
 ORDER BY month;
 
+-- 2.2.2 Performance BY category AND region (proxy)
 
---2.2.2 Performance par catégorie et région (proxy)
-
---Ventes par région
+-- Sales BY region
 
 SELECT
   region,
@@ -24,33 +23,30 @@ WHERE transaction_type = 'Sale'
 GROUP BY region
 ORDER BY total_sales DESC;
 
---Ventes par type de transaction (sanity check)
+-- Sales BY transaction type (sanity check)
 
 SELECT transaction_type, COUNT(*) AS cnt, SUM(amount) AS total_amount
 FROM SILVER.FINANCIAL_TRANSACTIONS_CLEAN
 GROUP BY transaction_type
 ORDER BY total_amount DESC;
 
+-- 2.2.3 Customer distribution BY demographic segments
 
---2.2.3 Répartition des clients par segments démographiques
-
---Par région
+-- BY region
 
 SELECT region, COUNT(*) AS nb_clients, AVG(annual_income) AS avg_income
 FROM SILVER.CUSTOMER_DEMOGRAPHICS_CLEAN
 GROUP BY region
 ORDER BY nb_clients DESC;
 
-
---Par genre
+-- Par genre
 
 SELECT gender, COUNT(*) AS nb_clients
 FROM SILVER.CUSTOMER_DEMOGRAPHICS_CLEAN
 GROUP BY gender
 ORDER BY nb_clients DESC;
 
-
---Par statut marital
+-- Par statut marital
 
 SELECT marital_status, COUNT(*) AS nb_clients
 FROM SILVER.CUSTOMER_DEMOGRAPHICS_CLEAN
