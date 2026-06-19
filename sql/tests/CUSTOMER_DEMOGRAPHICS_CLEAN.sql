@@ -3,6 +3,5 @@
 SELECT *
 FROM SILVER.CUSTOMER_DEMOGRAPHICS_CLEAN
 WHERE customer_id IS NULL
-   OR birth_date IS NULL
-   OR (age IS NOT NULL AND (age < 0 OR age > 120))
+   OR date_of_birth IS NULL
    OR (annual_income IS NOT NULL AND annual_income < 0);
