@@ -41,27 +41,27 @@ Data source: `s3://logbrain-datalake/datasets/food-beverage/`
 
 ---
 
-## 2.1 Snowflake app screenshots
+## 2.1 Streamlit app screenshots
 
-The following screenshots show key Snowflake views used in the project.
+Note: these screenshots were captured before the UI translation — the live app now shows English labels. Screenshots should be retaken to match.
 
 ### Overview
 
-![Snowflake overview](images/Overview.png)
+![Streamlit overview](images/Overview.png)
 
-This screenshot shows the Snowflake worksheet and the database/schema organization used for the project.
+This screenshot shows the Streamlit Overview page with KPI tiles and sales trend/region charts.
 
 ### Sales analysis
 
-![Sales analysis](images/Sales.png)
+![Streamlit sales](images/Sales.png)
 
-This screenshot highlights sales-related analytics queries and the cleaned `SILVER.FINANCIAL_TRANSACTIONS_CLEAN` dataset.
+This screenshot shows the Streamlit Sales page with monthly sales trend and sales count charts.
 
 ### Promotion analysis
 
-![Promotion analysis](images/Promotion.png)
+![Streamlit promotions](images/Promotion.png)
 
-This screenshot illustrates promotion impact reporting and the Snowflake worksheet used to validate promotional cleaning logic.
+This screenshot shows the Streamlit Promotions page with promotions by category, discount, and region charts.
 
 ---
 
