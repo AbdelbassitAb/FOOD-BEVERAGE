@@ -18,7 +18,7 @@ sales_flag AS (
   FROM sales s
 )
 SELECT
-  IFF(is_promo_period=1, 'WITH Promotion Period', 'Without Promotion Period') AS promo_flag,
+  IFF(is_promo_period=1, 'With Promotion Period', 'Without Promotion Period') AS promo_flag,
   SUM(amount) AS total_sales,
   COUNT(*) AS nb_sales
 FROM sales_flag
