@@ -17,7 +17,7 @@ ON_ERROR = 'CONTINUE';
 
 SELECT * FROM BRONZE.CUSTOMER_SERVICE_INTERACTIONS;
 
--- 3.3 financial_transactions.csv (⚠️ sensible)
+-- 3.3 financial_transactions.csv (⚠️ sensitive)
 COPY INTO BRONZE.FINANCIAL_TRANSACTIONS
 FROM @STG_FOOD_BEVERAGE/financial_transactions.csv
 FILE_FORMAT = (FORMAT_NAME = FF_CSV)
